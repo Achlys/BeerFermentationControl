@@ -1,4 +1,4 @@
-package org.xer.beerfermcontrolweb;
+package org.xer.beerfermcontrol;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

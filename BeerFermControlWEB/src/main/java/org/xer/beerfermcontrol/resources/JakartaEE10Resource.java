@@ -1,4 +1,4 @@
-package org.xer.beerfermcontrolweb.resources;
+package org.xer.beerfermcontrol.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
