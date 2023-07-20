@@ -7,7 +7,7 @@
                             http://www.springframework.org/schema/context 
                             http://www.springframework.org/schema/context/spring-context.xsd
                             http://www.springframework.org/schema/mvc 
-                            http://www.springframework.org/schema/context/spring-mvc.xsd">
+                            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <!-- Provide support for component scanning -->  
     <context:component-scan base-package="org.xer.beerfermcontrol.web" />  
@@ -15,11 +15,18 @@
     <!-- Provide support for conversion, formatting and validation -->  
     <mvc:annotation-driven />
     
+    <!-- Redirect for static content -->
+    <resources mapping="/static/**" location="/WEB-INF/static/" />
+    
     <!-- Provide a ViewResolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    
+    <beans:bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <beans:property name="jndiName" value="java:comp/env/jdbc/BeerDB"/>
+    </beans:bean>
     
 </beans>

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class InitController {
-    
+
     @RequestMapping("/prueba")
     public String prueba(){
         return "prueba";
