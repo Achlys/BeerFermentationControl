@@ -2,13 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation=" http://www.springframework.org/schema/beans 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
                             http://www.springframework.org/schema/beans/spring-beans.xsd
                             http://www.springframework.org/schema/context 
                             http://www.springframework.org/schema/context/spring-context.xsd
                             http://www.springframework.org/schema/mvc 
                             http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-
+    
     <!-- Provide support for component scanning -->  
     <context:component-scan base-package="org.xer.beerfermcontrol.web" />  
   
@@ -16,7 +17,7 @@
     <mvc:annotation-driven />
     
     <!-- Redirect for static content -->
-    <resources mapping="/static/**" location="/WEB-INF/static/" />
+    <mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
     
     <!-- Provide a ViewResolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -25,8 +26,8 @@
         <property name="suffix" value=".jsp" />
     </bean>
     
-    <beans:bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <beans:property name="jndiName" value="java:comp/env/jdbc/BeerDB"/>
-    </beans:bean>
+    <bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/BeerFermContDS"/>
+    </bean>
     
 </beans>
