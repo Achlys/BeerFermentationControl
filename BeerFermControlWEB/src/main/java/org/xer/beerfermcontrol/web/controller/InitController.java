@@ -15,9 +15,9 @@ public class InitController {
     
     private static final Logger LOGGER = LogManager.getLogger(InitController.class);
 
-    @RequestMapping("/prueba")
+    @RequestMapping("/login")
     public String prueba(){
-        return "prueba";
+        return "login";
     }
     
 }
