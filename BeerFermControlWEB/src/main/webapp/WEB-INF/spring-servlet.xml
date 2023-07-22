@@ -33,11 +33,24 @@
         <property name="warnLogCategory" value="RollingFileLogConfigDemo"/>
     </bean>
     
+    <!-- Provide i18n with resource bundles -->
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="classpath:messages" />
         <property name="defaultEncoding" value="UTF-8" />
         <property name="useCodeAsDefaultMessage" value="true" />
     </bean>
+    
+    <!-- Provide a Locale resolver -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="en" />
+    </bean>
+
+    <!-- Provide a locale change functionality -->
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="language" />
+        </bean>
+    </mvc:interceptors>
 
     <!-- Provide the DataSource -->
     <bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
