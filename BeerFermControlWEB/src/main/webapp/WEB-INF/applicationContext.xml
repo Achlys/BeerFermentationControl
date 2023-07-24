@@ -20,5 +20,12 @@
     <bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName" value="java:comp/env/jdbc/BeerFermContDS"/>
     </bean>
+    
+    <!-- Provide i18n with resource bundles -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="useCodeAsDefaultMessage" value="true" />
+    </bean>
 
 </beans>

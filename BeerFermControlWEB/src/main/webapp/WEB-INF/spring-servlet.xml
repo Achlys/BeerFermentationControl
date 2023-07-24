@@ -32,14 +32,7 @@
         <property name="exceptionAttribute" value="ex"/>
         <property name="warnLogCategory" value="RollingFileLogConfigDemo"/>
     </bean>
-    
-    <!-- Provide i18n with resource bundles -->
-    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basename" value="classpath:messages" />
-        <property name="defaultEncoding" value="UTF-8" />
-        <property name="useCodeAsDefaultMessage" value="true" />
-    </bean>
-    
+        
     <!-- Provide a Locale resolver -->
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
         <property name="defaultLocale" value="en" />
