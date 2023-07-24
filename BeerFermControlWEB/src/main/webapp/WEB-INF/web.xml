@@ -9,7 +9,14 @@
             30
         </session-timeout>
     </session-config>
-    <display-name>Beer Fermentation Control</display-name>  
+    <display-name>Beer Fermentation Control</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
     <servlet>    
         <servlet-name>spring</servlet-name>    
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>    

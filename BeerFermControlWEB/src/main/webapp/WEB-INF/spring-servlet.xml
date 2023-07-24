@@ -51,10 +51,5 @@
             <property name="paramName" value="language" />
         </bean>
     </mvc:interceptors>
-
-    <!-- Provide the DataSource -->
-    <bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="java:comp/env/jdbc/BeerFermContDS"/>
-    </bean>
     
 </beans>
