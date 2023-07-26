@@ -1,4 +1,5 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="org.xer.beerfermcontrol.web.util.WebConstants" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -9,76 +10,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/23c13a6a20.js" crossorigin="anonymous"></script>
+        <spring:url value="/static" var="URL_STATIC" />
+        <link rel="stylesheet" href="${URL_STATIC}/css/signin.css">
+        <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
         <title><spring:message code="title" /></title>
     </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <span class="navbar-brand mb-0 h1"><spring:message code="title" /></span>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">
-                                <spring:message code="page.name.login" />
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-flag"></i>
-                                <spring:message code="language" var="language" />
-                                <c:choose>
-                                    <c:when test="${language eq 'es'}">
-                                        Español
-                                    </c:when>
-                                    <c:when test="${language eq 'eu'}">
-                                        Euskara
-                                    </c:when>
-                                    <c:otherwise>
-                                        English
-                                    </c:otherwise>
-                                </c:choose>
-                            </a>
-                            <div class="dropdown-menu float-right" aria-labelledby="navbarDropdownMenuLink">
-                                <spring:url value="/login?language=" var="URL_LOGIN" />
-                                <c:choose>
-                                    <c:when test="${language eq 'es'}">
-                                        <a class="dropdown-item" href="${URL_LOGIN}eu">Euskara</a>
-                                        <a class="dropdown-item active" href="#">Español</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}en">English</a>
-                                    </c:when>
-                                    <c:when test="${language eq 'eu'}">
-                                        <a class="dropdown-item active" href="#">Euskara</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}es">Español</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}en">English</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a class="dropdown-item" href="${URL_LOGIN}eu">Euskara</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}es">Español</a>
-                                        <a class="dropdown-item active" href="#">English</a>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
+    <body class="text-center">
         <section>
-            <div>
-                <h1><spring:message code="h1.login" /></h1>
-                <p><spring:message code="subtitle.login" /></p>
-            </div>
-            <form:form action="/login" modelAttribute="usuario">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-12">
-
-                        </div>
+            <spring:url value="/login" var="URL_FORM" />
+            <form:form action="${URL_FORM}" modelAttribute="${WebConstants.USER}" method="POST" cssClass="form-signin">
+                <img class="mb-4" src="${URL_STATIC}/images/beer-icon.png" alt="" width="72" height="72">
+                <h1 class="h3 mb-3 font-weight-normal"><spring:message code="subtitle.login" /></h1>
+                <spring:message code="username" var="i18n_username" />
+                <label for="username" class="sr-only"><c:out value="${i18n_username}" /></label>
+                <form:input path="username" placeholder="${i18n_username}" cssClass="form-control" required="" autofocus="" />
+                <spring:message code="password" var="i18n_password" />
+                <label for="password" class="sr-only"><c:out value="${i18n_password}" /></label>
+                <form:password path="password" placeholder="${i18n_password}" cssClass="form-control" required="" />
+                <form:button type="submit" class="btn btn-lg btn-primary btn-block"><spring:message code="sign.in" /></form:button>
+                <div class="dropdown mt-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-flag"></i>
+                        <spring:message code="language" var="language" />
+                        <c:choose>
+                            <c:when test="${language eq 'es'}">
+                                Español
+                            </c:when>
+                            <c:when test="${language eq 'eu'}">
+                                Euskara
+                            </c:when>
+                            <c:otherwise>
+                                English
+                            </c:otherwise>
+                        </c:choose>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <spring:url value="/login?language=" var="URL_LOGIN" />
+                        <c:choose>
+                            <c:when test="${language eq 'es'}">
+                                <a class="dropdown-item" href="${URL_LOGIN}eu">Euskara</a>
+                                <a class="dropdown-item active" href="#">Español</a>
+                                <a class="dropdown-item" href="${URL_LOGIN}en">English</a>
+                            </c:when>
+                            <c:when test="${language eq 'eu'}">
+                                <a class="dropdown-item active" href="#">Euskara</a>
+                                <a class="dropdown-item" href="${URL_LOGIN}es">Español</a>
+                                <a class="dropdown-item" href="${URL_LOGIN}en">English</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="dropdown-item" href="${URL_LOGIN}eu">Euskara</a>
+                                <a class="dropdown-item" href="${URL_LOGIN}es">Español</a>
+                                <a class="dropdown-item active" href="#">English</a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </form:form>

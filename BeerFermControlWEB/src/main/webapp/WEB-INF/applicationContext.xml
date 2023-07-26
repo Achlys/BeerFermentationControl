@@ -17,8 +17,12 @@
     <context:component-scan base-package="org.xer.beerfermcontrol.core" />
     
     <!-- Provide the DataSource -->
-    <bean id="BeerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <bean id="beerFermControlDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName" value="java:comp/env/jdbc/BeerFermContDS"/>
+    </bean>
+    
+    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">  
+        <constructor-arg ref="beerFermControlDataSource" />
     </bean>
     
     <!-- Provide i18n with resource bundles -->
