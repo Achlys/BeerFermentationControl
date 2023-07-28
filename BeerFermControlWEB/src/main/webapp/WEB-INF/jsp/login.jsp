@@ -19,14 +19,15 @@
         <section>
             <spring:url value="/login" var="URL_FORM" />
             <form:form action="${URL_FORM}" modelAttribute="${WebConstants.USER}" method="POST" cssClass="form-signin">
+                <form:errors path="*" />
                 <img class="mb-4" src="${URL_STATIC}/images/beer-icon.png" alt="" width="72" height="72">
                 <h1 class="h3 mb-3 font-weight-normal"><spring:message code="subtitle.login" /></h1>
                 <spring:message code="username" var="i18n_username" />
                 <label for="username" class="sr-only"><c:out value="${i18n_username}" /></label>
-                <form:input path="username" placeholder="${i18n_username}" cssClass="form-control" required="" autofocus="" />
+                <form:input path="username" placeholder="${i18n_username}" cssClass="form-control" required="" autofocus="" cssErrorClass="is-invalid" />
                 <spring:message code="password" var="i18n_password" />
                 <label for="password" class="sr-only"><c:out value="${i18n_password}" /></label>
-                <form:password path="password" placeholder="${i18n_password}" cssClass="form-control" required="" />
+                <form:password path="password" placeholder="${i18n_password}" cssClass="form-control" required="" cssErrorClass="is-invalid" />
                 <form:button type="submit" class="btn btn-lg btn-primary btn-block"><spring:message code="sign.in" /></form:button>
                 <div class="dropdown mt-3">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

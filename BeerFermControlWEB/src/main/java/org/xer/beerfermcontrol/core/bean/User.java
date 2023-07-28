@@ -2,6 +2,7 @@ package org.xer.beerfermcontrol.core.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 
 /**
  *
@@ -10,7 +11,9 @@ import java.util.Date;
 public class User implements Serializable {
     
     private Integer id;
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
     private Date startDate;
     private Date endDate;
