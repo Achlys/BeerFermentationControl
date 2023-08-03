@@ -40,6 +40,7 @@
 
     <!-- Provide a locale change functionality -->
     <mvc:interceptors>
+        <bean class="org.xer.beerfermcontrol.web.util.LoginHandlerInterceptor" />
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
             <property name="paramName" value="language" />
         </bean>
