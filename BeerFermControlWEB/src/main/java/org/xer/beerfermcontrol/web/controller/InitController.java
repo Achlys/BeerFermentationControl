@@ -48,7 +48,7 @@ public class InitController {
             bindingResult.rejectValue("password", "error.vacio");
             return "login";
         } else {
-            return "redirect:/";
+            return "redirect:/configList";
         }
     }
 

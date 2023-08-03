@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.User;
+import org.xer.beerfermcontrol.core.dao.ConfigDao;
 import org.xer.beerfermcontrol.core.dao.UserDao;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
 
@@ -15,6 +16,8 @@ import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
 @Service
 public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
 
+    @Autowired
+    private ConfigDao configDao;
     @Autowired
     private UserDao userDao;
 
@@ -30,7 +33,7 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
 
     @Override
     public List<Config> getUsersConfigs(Integer userId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return configDao.getUsersConfigs(userId);
     }
 
 }
