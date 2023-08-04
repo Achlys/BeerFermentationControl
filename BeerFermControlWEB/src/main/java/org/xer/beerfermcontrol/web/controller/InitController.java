@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
 import org.xer.beerfermcontrol.web.util.WebConstants;
@@ -50,6 +51,12 @@ public class InitController {
         } else {
             return "redirect:/configList";
         }
+    }
+    
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(Model model, SessionStatus status) {
+        status.setComplete();
+        return "redirect:/login";
     }
 
 }

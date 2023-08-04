@@ -23,11 +23,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">
-                                <spring:message code="page.name.login" />
-                            </a>
-                        </li>
+                        <li class="nav-item active">&nbsp;</li>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -47,33 +43,41 @@
                                 </c:choose>
                             </a>
                             <div class="dropdown-menu float-right" aria-labelledby="navbarDropdownMenuLink">
-                                <spring:url value="/login?language=" var="URL_LOGIN" />
+                                <spring:url value="/configList?language=" var="URL_LOCALE_CHANGE" />
                                 <c:choose>
                                     <c:when test="${language eq 'es'}">
-                                        <a class="dropdown-item" href="${URL_LOGIN}eu">Euskara</a>
+                                        <a class="dropdown-item" href="${URL_LOCALE_CHANGE}eu">Euskara</a>
                                         <a class="dropdown-item active" href="#">Español</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}en">English</a>
+                                        <a class="dropdown-item" href="${URL_LOCALE_CHANGE}en">English</a>
                                     </c:when>
                                     <c:when test="${language eq 'eu'}">
                                         <a class="dropdown-item active" href="#">Euskara</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}es">Español</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}en">English</a>
+                                        <a class="dropdown-item" href="${URL_LOCALE_CHANGE}es">Español</a>
+                                        <a class="dropdown-item" href="${URL_LOCALE_CHANGE}en">English</a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a class="dropdown-item" href="${URL_LOGIN}eu">Euskara</a>
-                                        <a class="dropdown-item" href="${URL_LOGIN}es">Español</a>
+                                        <a class="dropdown-item" href="${URL_LOCALE_CHANGE}eu">Euskara</a>
+                                        <a class="dropdown-item" href="${URL_LOCALE_CHANGE}es">Español</a>
                                         <a class="dropdown-item active" href="#">English</a>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <spring:url value="/logout" var="URL_LOGOUT" />
+                            <a class="nav-link" href="${URL_LOGOUT}">
+                                <i class="fa-solid fa-power-off"></i>
+                                <spring:message code="logout" />
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         </header>
-        <section>
+        <main>
 
-        </section>
+            
+        </main>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
