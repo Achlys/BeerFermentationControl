@@ -11,6 +11,7 @@ public class Tplink implements Serializable {
     private Integer id;
     private Integer configId;
     private String name;
+    private String type;
     private String ip;
 
     public Integer getId() {
@@ -35,6 +36,14 @@ public class Tplink implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getIp() {

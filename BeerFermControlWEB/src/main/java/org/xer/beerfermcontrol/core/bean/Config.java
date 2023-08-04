@@ -16,7 +16,7 @@ public class Config implements Serializable {
     private Double tolerance;
     private Date startDate;
     private Date endDate;
-    private Tplink tplinkHot;
+    private Tplink tplinkWarm;
     private Tplink tplinkCold;
     private Hydrom hydrom;
     private List<Range> ranges;
@@ -69,12 +69,12 @@ public class Config implements Serializable {
         this.endDate = endDate;
     }
 
-    public Tplink getTplinkHot() {
-        return tplinkHot;
+    public Tplink getTplinkWarm() {
+        return tplinkWarm;
     }
 
-    public void setTplinkHot(Tplink tplinkHot) {
-        this.tplinkHot = tplinkHot;
+    public void setTplinkWarm(Tplink tplinkWarm) {
+        this.tplinkWarm = tplinkWarm;
     }
 
     public Tplink getTplinkCold() {

@@ -16,7 +16,7 @@
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <span class="navbar-brand mb-0 h1"><spring:message code="title" /></span>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -73,47 +73,19 @@
                     </ul>
                 </div>
             </nav>
+            <div class="nav-scroller bg-white shadow-sm">
+                <nav class="nav nav-underline">
+                    <span class="nav-link active"></span>
+                    
+                </nav>
+            </div>
         </header>
         <main>
-            <c:if test="${empty requestScope[WebConstants.CONFIG_LIST]}">
-                <spring:message code="empty.list" />
-            </c:if>
-            <c:if test="${not empty requestScope[WebConstants.CONFIG_LIST]}">
-                <table id="configList" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th><spring:message code="name" /></th>
-                            <th><spring:message code="start.date" /></th>
-                            <th><spring:message code="end.date" /></th>
-                            <th><spring:message code="tolerance" /></th>
-                            <th><spring:message code="cold.plug" /></th>
-                            <th><spring:message code="warm.plug" /></th>
-                            <th><spring:message code="hydrom" /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${requestScope[WebConstants.CONFIG_LIST]}">
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:if>
+
+            
         </main>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-        <script>
-            $(function () {
-                new DataTable('#configList');
-            });
-        </script>
     </body>
 </html>

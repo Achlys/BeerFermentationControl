@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.dao.ConfigDao;
+import org.xer.beerfermcontrol.core.dao.HydromDao;
+import org.xer.beerfermcontrol.core.dao.TplinkDao;
 import org.xer.beerfermcontrol.core.dao.UserDao;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
+import org.xer.beerfermcontrol.core.util.CoreConstants;
 
 /**
  *
@@ -18,6 +21,10 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
 
     @Autowired
     private ConfigDao configDao;
+    @Autowired
+    private HydromDao hydromDao;
+    @Autowired
+    private TplinkDao tplinkDao;
     @Autowired
     private UserDao userDao;
 
@@ -33,7 +40,15 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
 
     @Override
     public List<Config> getUsersConfigs(Integer userId) {
-        return configDao.getUsersConfigs(userId);
+        List<Config> configList = configDao.getUsersConfigs(userId);
+        if (configList != null) {
+            for (Config config : configList) {
+                config.setTplinkCold(tplinkDao.getTplinkByConfig(config.getId(), CoreConstants.TPLINK_TYPE_COLD));
+                config.setTplinkWarm(tplinkDao.getTplinkByConfig(config.getId(), CoreConstants.TPLINK_TYPE_WARM));
+                config.setHydrom(hydromDao.getHydromByConfig(config.getId()));
+            }
+        }
+        return configList;
     }
 
 }
