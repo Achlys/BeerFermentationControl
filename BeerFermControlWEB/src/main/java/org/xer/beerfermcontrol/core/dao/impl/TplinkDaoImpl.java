@@ -24,11 +24,10 @@ public class TplinkDaoImpl implements TplinkDao {
 
     @Override
     public Tplink getTplinkByConfig(Integer configId, String type) {
-        String sql = "SELECT * FROM TPLINK WHERE CONFIG_ID = :configid";
-        // TODO: include type when de DDBB is corrected
+        String sql = "SELECT * FROM TPLINK WHERE CONFIG_ID = :configid AND TYPE = :type";
         Map parameters = new HashMap();
         parameters.put("configid", configId);
-        // parameters.put("type", type);
+        parameters.put("type", type);
         try {
             return jdbc.queryForObject(sql, parameters, new RowMapper<Tplink>() {
                 @Override
@@ -37,7 +36,7 @@ public class TplinkDaoImpl implements TplinkDao {
                     tplink.setId(rs.getInt("ID"));
                     tplink.setConfigId(rs.getInt("CONFIG_ID"));
                     tplink.setName(rs.getString("NAME").trim());
-                    //tplink.setType(rs.getString("TEMP_TYPE"));
+                    tplink.setType(rs.getString("TYPE"));
                     tplink.setIp(rs.getString("IP"));
                     return tplink;
                 }

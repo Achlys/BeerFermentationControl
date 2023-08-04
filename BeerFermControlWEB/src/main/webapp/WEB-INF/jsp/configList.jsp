@@ -3,6 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,6 +18,10 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <spring:url value="/configList" var="URL_INDEX" />
+                <a class="navbar-brand" href="${URL_INDEX}">
+                    <img src="${URL_STATIC}/images/beer-icon.png" width="30" height="30" alt="">
+                </a>
                 <span class="navbar-brand mb-0 h1"><spring:message code="title" /></span>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -74,38 +79,61 @@
                 </div>
             </nav>
         </header>
-        <main>
-            <c:if test="${empty requestScope[WebConstants.CONFIG_LIST]}">
-                <spring:message code="empty.list" />
-            </c:if>
-            <c:if test="${not empty requestScope[WebConstants.CONFIG_LIST]}">
-                <table id="configList" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th><spring:message code="name" /></th>
-                            <th><spring:message code="start.date" /></th>
-                            <th><spring:message code="end.date" /></th>
-                            <th><spring:message code="tolerance" /></th>
-                            <th><spring:message code="cold.plug" /></th>
-                            <th><spring:message code="warm.plug" /></th>
-                            <th><spring:message code="hydrom" /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${requestScope[WebConstants.CONFIG_LIST]}">
+        <main class="container-lg">
+            <div class="mt-5">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><spring:message code="config.list" /></h2>
+                    </div>
+                    <div class="col-sm-4">
+                        <spring:url value="/config/add" var="URL_ADD_CONFIG" />
+                        <a class="btn btn-info add-new float-right" href="${URL_ADD_CONFIG}"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
+                    </div>
+                </div>
+                <c:if test="${empty requestScope[WebConstants.CONFIG_LIST]}">
+                    <div class="alert alert-warning" role="alert">
+                        <spring:message code="empty.list" />
+                    </div>
+                </c:if>
+                <c:if test="${not empty requestScope[WebConstants.CONFIG_LIST]}">
+                    <table id="configList" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <th><spring:message code="name" /></th>
+                                <th><spring:message code="start.date" /></th>
+                                <th><spring:message code="end.date" /></th>
+                                <th><spring:message code="tolerance" /></th>
+                                <th><spring:message code="cold.plug" /></th>
+                                <th><spring:message code="warm.plug" /></th>
+                                <th><spring:message code="hydrom" /></th>
                             </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:if>
+                        </thead>
+                        <tbody>
+                            <spring:message code="date.pattern" var="DATE_PATTERN" />
+                            <c:forEach items="${requestScope[WebConstants.CONFIG_LIST]}" var="config">
+                                <tr>
+                                    <td><c:out value="config.name" /></td>
+                                    <td><fmt:formatDate pattern="${DATE_PATTERN}" value="${config.startDate}" /></td>
+                                    <td><fmt:formatDate pattern="${DATE_PATTERN}" value="${config.endDate}" /></td>
+                                    <td><fmt:formatNumber pattern="#.##" value="${config.tolerance}" /></td>
+                                    <td>
+                                        <c:if test="${empty config.tplinkCold}">-</c:if>
+                                        <c:if test="${not empty config.tplinkCold}"><c:out value="config.tplinkCold.name" /></c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${empty config.tplinkWarm}">-</c:if>
+                                        <c:if test="${not empty config.tplinkWarm}"><c:out value="config.tplinkWarm.name" /></c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${empty config.hydrom}">-</c:if>
+                                        <c:if test="${not empty config.hydrom}"><c:out value="config.hydrom.name" /></c:if>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:if>
+            </div>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

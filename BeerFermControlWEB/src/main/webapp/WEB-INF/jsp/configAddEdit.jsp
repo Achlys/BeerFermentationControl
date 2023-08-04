@@ -47,7 +47,7 @@
                                 </c:choose>
                             </a>
                             <div class="dropdown-menu float-right" aria-labelledby="navbarDropdownMenuLink">
-                                <spring:url value="/config/xxx?language=" var="URL_LOCALE_CHANGE" />
+                                <spring:url value="/config/add?language=" var="URL_LOCALE_CHANGE" />
                                 <c:choose>
                                     <c:when test="${language eq 'es'}">
                                         <a class="dropdown-item" href="${URL_LOCALE_CHANGE}eu">Euskara</a>
@@ -77,25 +77,21 @@
                     </ul>
                 </div>
             </nav>
-            <div class="nav-scroller bg-white shadow-sm">
-                <nav class="nav nav-underline">
-                    <span class="nav-link active"></span>
-                    
-                </nav>
-            </div>
         </header>
         <main class="container-lg">
-            <div class="mt-5">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h2><spring:message code="config.list" /></h2>
-                    </div>
-                    <div class="col-sm-4">
-                        <spring:url value="/config/add" var="URL_ADD_CONFIG" />
-                        <a class="btn btn-info add-new float-right" href="${URL_ADD_CONFIG}"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
+            <spring:url value="/config/add" var="URL_ADD_CONFIG" />
+            <form:form action="${URL_ADD_CONFIG}" modelAttribute="${WebConstants.CONFIG}">
+                <div class="mt-5">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2><spring:message code="new.config" /></h2>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-info add-new float-right"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form:form>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
