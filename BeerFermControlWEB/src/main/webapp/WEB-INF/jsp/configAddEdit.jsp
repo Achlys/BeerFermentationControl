@@ -88,6 +88,8 @@
                         </div>
                         <div class="col-sm-4">
                             <button type="submit" class="btn btn-info add-new float-right"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
+                            <spring:url value="/configList" var="URL_BACK" />
+                            <a class="btn btn-info add-new float-right" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
                         </div>
                     </div>
                 </div>
