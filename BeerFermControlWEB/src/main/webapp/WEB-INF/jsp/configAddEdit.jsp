@@ -10,6 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <spring:url value="/static" var="URL_STATIC" />
+        <link rel="stylesheet" href="${URL_STATIC}/css/jquery-ui.min.css">
         <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
         <script src="https://kit.fontawesome.com/23c13a6a20.js" crossorigin="anonymous"></script>
         <title><spring:message code="title" /></title>
@@ -79,24 +80,76 @@
             </nav>
         </header>
         <main class="container-lg">
-            <spring:url value="/config/add" var="URL_ADD_CONFIG" />
-            <form:form action="${URL_ADD_CONFIG}" modelAttribute="${WebConstants.CONFIG}">
+            <c:if test="${empty requestScope[WebConstants.CONFIG].id}">
+                <spring:url value="/config/add" var="URL_ADD_EDIT_CONFIG" />
+            </c:if>
+            <c:if test="${not empty requestScope[WebConstants.CONFIG].id}">
+                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/edit" var="URL_ADD_EDIT_CONFIG" />
+            </c:if>
+            <form:form action="${URL_ADD_EDIT_CONFIG}" modelAttribute="${WebConstants.CONFIG}">
                 <div class="mt-5">
                     <div class="row">
                         <div class="col-sm-8">
-                            <h2><spring:message code="new.config" /></h2>
+                            <h2>
+                                <c:if test="${empty requestScope[WebConstants.CONFIG].id}">
+                                    <spring:message code="new.config" />
+                                </c:if>
+                                <c:if test="${not empty requestScope[WebConstants.CONFIG].id}">
+                                    <spring:message code="edit.config" />
+                                </c:if>
+                            </h2>
                         </div>
                         <div class="col-sm-4">
-                            <button type="submit" class="btn btn-info add-new float-right"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
-                            <spring:url value="/configList" var="URL_BACK" />
-                            <a class="btn btn-info add-new float-right" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
+                            <div class="btn-group float-right" role="group">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
+                                <spring:url value="/configList" var="URL_BACK" />
+                                <a class="btn btn-secondary" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <form:label path="name"><spring:message code="name" /></form:label>
+                            <form:input path="name" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+                            <form:errors path="name" cssClass="invalid-feedback" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <form:label path="tolerance"><spring:message code="tolerance" /></form:label>
+                            <form:input path="tolerance" type="number" min="0" max="2" step="0.1" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+                            <form:errors path="tolerance" cssClass="invalid-feedback" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <form:label path="startDate"><spring:message code="start.date" /></form:label>
+                            <form:input path="startDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" />
+                            <form:errors path="startDate" cssClass="invalid-feedback" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <form:label path="endDate"><spring:message code="end.date" /></form:label>
+                            <form:input path="endDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" />
+                            <form:errors path="endDate" cssClass="invalid-feedback" />
                         </div>
                     </div>
                 </div>
             </form:form>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
+        <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
+        <c:if test="${language eq 'es'}">
+            <script src="${URL_STATIC}/js/datepicker-es.js"></script>
+        </c:if>
+        <c:if test="${language eq 'eu'}">
+            <script src="${URL_STATIC}/js/datepicker-eu.js"></script>
+        </c:if>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+        <script>
+            $(function () {
+                $(".datepicker").datepicker();
+            });
+        </script>
     </body>
 </html>

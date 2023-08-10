@@ -11,6 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <spring:url value="/static" var="URL_STATIC" />
+        <link rel="stylesheet" href="${URL_STATIC}/css/jquery-ui.min.css">
         <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
         <script src="https://kit.fontawesome.com/23c13a6a20.js" crossorigin="anonymous"></script>
         <title><spring:message code="title" /></title>
@@ -87,11 +88,11 @@
                     </div>
                     <div class="col-sm-4">
                         <spring:url value="/config/add" var="URL_ADD_CONFIG" />
-                        <a class="btn btn-info add-new float-right" href="${URL_ADD_CONFIG}"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
+                        <a class="btn btn-primary float-right" href="${URL_ADD_CONFIG}"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
                     </div>
                 </div>
                 <c:if test="${empty requestScope[WebConstants.CONFIG_LIST]}">
-                    <div class="alert alert-warning" role="alert">
+                    <div class="alert alert-warning mt-3" role="alert">
                         <spring:message code="empty.list" />
                     </div>
                 </c:if>
@@ -119,26 +120,34 @@
                                     <td>
                                         <c:if test="${empty config.tplinkCold}">-</c:if>
                                         <c:if test="${not empty config.tplinkCold}"><c:out value="config.tplinkCold.name" /></c:if>
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
                                         <c:if test="${empty config.tplinkWarm}">-</c:if>
                                         <c:if test="${not empty config.tplinkWarm}"><c:out value="config.tplinkWarm.name" /></c:if>
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
                                         <c:if test="${empty config.hydrom}">-</c:if>
                                         <c:if test="${not empty config.hydrom}"><c:out value="config.hydrom.name" /></c:if>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </c:if>
             </div>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
+        <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
+        <c:if test="${language eq 'es'}">
+            <script src="${URL_STATIC}/js/datepicker-es.js"></script>
+        </c:if>
+        <c:if test="${language eq 'eu'}">
+            <script src="${URL_STATIC}/js/datepicker-eu.js"></script>
+        </c:if>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
         <script>
+            $.datepicker.setDefaults($.datepicker.regional[ "${language}" ]);
             $(function () {
                 new DataTable('#configList');
             });
