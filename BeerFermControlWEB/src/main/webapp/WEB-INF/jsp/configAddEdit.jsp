@@ -112,24 +112,24 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <form:label path="name"><spring:message code="name" /></form:label>
-                            <form:input path="name" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+                            <form:input path="name" cssClass="form-control" cssErrorClass="form-control is-invalid" required="" />
                             <form:errors path="name" cssClass="invalid-feedback" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <form:label path="tolerance"><spring:message code="tolerance" /></form:label>
-                            <form:input path="tolerance" type="number" min="0" max="2" step="0.1" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+                            <form:input path="tolerance" type="number" min="0" max="2" step="0.1" cssClass="form-control" cssErrorClass="form-control is-invalid" required="" />
                             <form:errors path="tolerance" cssClass="invalid-feedback" />
                         </div>
                         <div class="form-group col-md-4">
                             <form:label path="startDate"><spring:message code="start.date" /></form:label>
-                            <form:input path="startDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" />
+                            <form:input path="startDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" required="" />
                             <form:errors path="startDate" cssClass="invalid-feedback" />
                         </div>
                         <div class="form-group col-md-4">
                             <form:label path="endDate"><spring:message code="end.date" /></form:label>
-                            <form:input path="endDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" />
+                            <form:input path="endDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" required="" />
                             <form:errors path="endDate" cssClass="invalid-feedback" />
                         </div>
                     </div>

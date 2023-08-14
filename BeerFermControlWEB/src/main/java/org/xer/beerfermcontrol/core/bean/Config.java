@@ -3,6 +3,7 @@ package org.xer.beerfermcontrol.core.bean;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 /**
  *
@@ -12,9 +13,13 @@ public class Config implements Serializable {
     
     private Integer id;
     private Integer userId;
+    @NotBlank
     private String name;
+    @NotBlank
     private Double tolerance;
+    @NotBlank
     private Date startDate;
+    @NotBlank
     private Date endDate;
     private Tplink tplinkWarm;
     private Tplink tplinkCold;

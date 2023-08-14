@@ -10,5 +10,7 @@ import org.xer.beerfermcontrol.core.bean.Config;
 public interface ConfigDao {
     
     List<Config> getUsersConfigs(Integer userId);
+
+    void addConfig(Config newConfig);
     
 }

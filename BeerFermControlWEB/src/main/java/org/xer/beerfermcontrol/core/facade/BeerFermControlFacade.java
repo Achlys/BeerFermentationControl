@@ -13,5 +13,7 @@ public interface BeerFermControlFacade {
     User getUser(String username, String password);
     
     List<Config> getUsersConfigs(Integer userId);
+
+    void addConfig(Config newConfig);
     
 }

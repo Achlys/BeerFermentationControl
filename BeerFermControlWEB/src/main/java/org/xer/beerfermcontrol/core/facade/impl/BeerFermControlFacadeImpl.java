@@ -51,4 +51,9 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
         return configList;
     }
 
+    @Override
+    public void addConfig(Config newConfig) {
+        configDao.addConfig(newConfig);
+    }
+
 }
