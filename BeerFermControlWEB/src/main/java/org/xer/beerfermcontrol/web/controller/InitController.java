@@ -53,11 +53,16 @@ public class InitController {
             return "redirect:/configList";
         }
     }
-    
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(Model model, SessionStatus status) {
         status.setComplete();
         return "redirect:/login";
+    }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String error(Model model) {
+        return "error";
     }
 
 }

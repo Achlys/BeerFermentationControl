@@ -7,11 +7,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <spring:url value="/static" var="URL_STATIC" />
+        <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
+        <link rel="stylesheet" href="${URL_STATIC}/css/beer_ferm_control.css">
         <title><spring:message code="title" /></title>
     </head>
     <body>
         <header
-            <div class="jumbotron text-center">
+            <div class="jumbotron text-center bg-danger text-white">
                 <h1><spring:message code="h1.error" /></h1>
             </div>
         </header>
@@ -26,6 +29,8 @@
                             <c:out value="${trace}" />
                         </c:forEach>
                         -->
+                        <spring:url value="/configList" var="URL_HOME" />
+                        <p><a href="${URL_HOME}" class="btn btn-primary"><spring:message code="home.page" /></a></p>
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <spring:url value="/static" var="URL_STATIC" />
         <link rel="stylesheet" href="${URL_STATIC}/css/jquery-ui.min.css">
+        <link rel="stylesheet" href="${URL_STATIC}/css/beer_ferm_control.css">
         <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
         <script src="https://kit.fontawesome.com/23c13a6a20.js" crossorigin="anonymous"></script>
         <title><spring:message code="title" /></title>
