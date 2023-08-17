@@ -83,6 +83,14 @@
         </header>
         <main class="container-lg">
             <div class="mt-5">
+                <c:if test="${not empty requestScope[WebConstants.SUCCES_KEY]}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <spring:message code="${requestScope[WebConstants.SUCCES_KEY]}" />
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </c:if>
                 <div class="row">
                     <div class="col-sm-8">
                         <h2><spring:message code="config.list" /></h2>
@@ -123,17 +131,17 @@
                                         <td>
                                             <c:if test="${empty config.tplinkCold}">-</c:if>
                                             <c:if test="${not empty config.tplinkCold}"><c:out value="config.tplinkCold.name" /></c:if>
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             <c:if test="${empty config.tplinkWarm}">-</c:if>
                                             <c:if test="${not empty config.tplinkWarm}"><c:out value="config.tplinkWarm.name" /></c:if>
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             <c:if test="${empty config.hydrom}">-</c:if>
                                             <c:if test="${not empty config.hydrom}"><c:out value="config.hydrom.name" /></c:if>
-                                        </td>
-                                        <td>
-                                            <a href="${URL_CONFIG}/${config.id}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
+                                            </td>
+                                            <td>
+                                                <a href="${URL_CONFIG}/${config.id}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
                                             <a href="${URL_CONFIG}/${config.id}/edit" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
                                             <a href="${URL_CONFIG}/${config.id}/remove" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                                         </td>

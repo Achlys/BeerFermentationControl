@@ -42,19 +42,19 @@ public class ConfigDaoImpl implements ConfigDao {
             }
         });
     }
-    
+
     @Override
-    public void addConfig(Config newConfig){
+    public void addConfig(Config newConfig) {
         String sql = "SELECT MAX(ID) FROM CONFIG";
-        Integer id = jdbc.query(sql, new ResultSetExtractor<Integer>(){
+        Integer id = jdbc.query(sql, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
-                if(rs.next()){
+                if (rs.next()) {
                     return rs.getInt(1) + 1;
-                }else{
+                } else {
                     return 1;
                 }
-            }     
+            }
         });
         sql = "INSERT INTO CONFIG (ID, USERS_ID, NAME, TOLERANCE, START_DATE, END_DATE) VALUES (:id, :userId, :name, :tolerance, :startDate, :endDate)";
         Map parameters = new HashMap();
@@ -66,5 +66,16 @@ public class ConfigDaoImpl implements ConfigDao {
         parameters.put("endDate", newConfig.getEndDate());
         jdbc.update(sql, parameters);
     }
-    
+
+    @Override
+    public void removeConfig(Integer id, Integer idUser) {
+        String sql = "DELETE FROM CONFIG WHERE ID = :id AND USERS_ID = :userId";
+        Map parameters = new HashMap();
+        parameters.put("id", id);
+        parameters.put("userId", idUser);
+        if (jdbc.update(sql, parameters) == 0) {
+            throw new RuntimeException("Ha intentado eliminar un config ID que no coincidia con el user ID!!!");
+        }
+    }
+
 }

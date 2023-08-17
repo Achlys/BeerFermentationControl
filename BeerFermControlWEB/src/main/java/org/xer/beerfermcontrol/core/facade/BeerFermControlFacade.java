@@ -15,5 +15,7 @@ public interface BeerFermControlFacade {
     List<Config> getUsersConfigs(Integer userId);
 
     void addConfig(Config newConfig);
+
+    void removeConfig(Integer id, Integer idUser);
     
 }

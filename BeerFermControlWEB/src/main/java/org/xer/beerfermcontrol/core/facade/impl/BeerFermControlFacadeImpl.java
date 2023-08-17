@@ -56,4 +56,9 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
         configDao.addConfig(newConfig);
     }
 
+    @Override
+    public void removeConfig(Integer id, Integer idUser) {
+        configDao.removeConfig(id, idUser);
+    }
+
 }

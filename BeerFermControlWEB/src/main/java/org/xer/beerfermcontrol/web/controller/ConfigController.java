@@ -14,9 +14,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
@@ -52,12 +55,20 @@ public class ConfigController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addConfig(@Valid @ModelAttribute(WebConstants.CONFIG) Config newConfig, BindingResult bindingResult, Model model) {
+    public String addConfig(@Valid @ModelAttribute(WebConstants.CONFIG) Config newConfig, BindingResult bindingResult, Model model, RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
             return "configAddEdit";
         }
         newConfig.setUserId(((User) model.asMap().get(WebConstants.USER)).getId());
         beerFermControlFacade.addConfig(newConfig);
+        ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.added");
+        return "redirect:/configList";
+    }
+    
+    @RequestMapping(value = "/{id}/remove", method = RequestMethod.GET)
+    public String remove(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+        beerFermControlFacade.removeConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId());
+        ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.removed");
         return "redirect:/configList";
     }
 

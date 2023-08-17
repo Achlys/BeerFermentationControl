@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -27,8 +28,11 @@ public class ConfigListController {
     private BeerFermControlFacade beerFermControlFacade;
 
     @RequestMapping(value = "/configList", method = RequestMethod.GET)
-    public String loadConfigList(Model model){
+    public String loadConfigList(Model model, @ModelAttribute(WebConstants.SUCCES_KEY) String succes){
         model.addAttribute(WebConstants.CONFIG_LIST, beerFermControlFacade.getUsersConfigs(((User)model.asMap().get(WebConstants.USER)).getId()));
+        if(succes != null){
+            model.addAttribute(WebConstants.SUCCES_KEY, succes);
+        }
         return "configList";
     }
 
