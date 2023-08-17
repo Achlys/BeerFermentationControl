@@ -1,12 +1,18 @@
 package org.xer.beerfermcontrol.web.controller;
 
+import java.util.Locale;
 import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,32 +23,40 @@ import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
 import org.xer.beerfermcontrol.web.util.WebConstants;
 
 /**
- * 
- * 
+ *
+ *
  * @author Achlys
  */
 @Controller
 @SessionAttributes({WebConstants.USER})
 @RequestMapping("/config")
 public class ConfigController {
-    
+
     private static final Logger LOGGER = LogManager.getLogger(ConfigController.class);
-    
+
     @Autowired
     private BeerFermControlFacade beerFermControlFacade;
+    @Autowired
+    private MessageSource messageSource;
+
+    @InitBinder
+    public void initBinder(Locale locale, WebDataBinder dataBinder) {
+        dataBinder.addCustomFormatter(new DateFormatter(messageSource.getMessage("date.pattern", null, locale)));
+        dataBinder.addCustomFormatter(new NumberStyleFormatter());
+    }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String loadAdd(Model model){
+    public String loadAdd(Model model) {
         model.addAttribute(WebConstants.CONFIG, new Config());
         return "configAddEdit";
     }
-    
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addConfig(@Valid @ModelAttribute(WebConstants.CONFIG) Config newConfig, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+    public String addConfig(@Valid @ModelAttribute(WebConstants.CONFIG) Config newConfig, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "configAddEdit";
         }
-        newConfig.setUserId(((User)model.asMap().get(WebConstants.USER)).getId());
+        newConfig.setUserId(((User) model.asMap().get(WebConstants.USER)).getId());
         beerFermControlFacade.addConfig(newConfig);
         return "redirect:/configList";
     }

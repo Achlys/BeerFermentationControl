@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -15,11 +16,11 @@ public class Config implements Serializable {
     private Integer userId;
     @NotBlank
     private String name;
-    @NotBlank
+    @NotNull
     private Double tolerance;
-    @NotBlank
+    @NotNull
     private Date startDate;
-    @NotBlank
+    @NotNull
     private Date endDate;
     private Tplink tplinkWarm;
     private Tplink tplinkCold;

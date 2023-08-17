@@ -49,6 +49,7 @@ public class InitController {
             bindingResult.rejectValue("password", "error.vacio");
             return "login";
         } else {
+            model.addAttribute(WebConstants.USER, user);
             return "redirect:/configList";
         }
     }

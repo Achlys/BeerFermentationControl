@@ -50,13 +50,13 @@ public class ConfigDaoImpl implements ConfigDao {
             @Override
             public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
                 if(rs.next()){
-                    return rs.getInt(0) + 1;
+                    return rs.getInt(1) + 1;
                 }else{
                     return 1;
                 }
             }     
         });
-        sql = "INSERT INTO CONFIG (ID, USER_ID, NAME, TOLERANCE, START_DATE, END_DATE) VALUES (:id, :userId, :name, :tolerance, :startDate, :endDate)";
+        sql = "INSERT INTO CONFIG (ID, USERS_ID, NAME, TOLERANCE, START_DATE, END_DATE) VALUES (:id, :userId, :name, :tolerance, :startDate, :endDate)";
         Map parameters = new HashMap();
         parameters.put("id", id);
         parameters.put("userId", newConfig.getUserId());
