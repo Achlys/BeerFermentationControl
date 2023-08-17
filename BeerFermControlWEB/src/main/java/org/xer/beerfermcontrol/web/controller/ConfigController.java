@@ -71,5 +71,22 @@ public class ConfigController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.removed");
         return "redirect:/configList";
     }
+    
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String loadEdit(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute(WebConstants.CONFIG, beerFermControlFacade.getConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId()));
+        return "configAddEdit";
+    }
+    
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+    public String edit(@PathVariable("id") Integer id, @Valid @ModelAttribute(WebConstants.CONFIG) Config config, BindingResult bindingResult, Model model, RedirectAttributes ra) {
+        if (bindingResult.hasErrors()) {
+            return "configAddEdit";
+        }
+        config.setUserId(((User) model.asMap().get(WebConstants.USER)).getId());
+        beerFermControlFacade.updateConfig(config);
+        ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.updated");
+        return "redirect:/configList";
+    }
 
 }

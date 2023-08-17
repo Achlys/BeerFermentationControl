@@ -16,6 +16,10 @@ public interface BeerFermControlFacade {
 
     void addConfig(Config newConfig);
 
-    void removeConfig(Integer id, Integer idUser);
+    void removeConfig(Integer id, Integer userId);
+
+    Config getConfig(Integer id, Integer userId);
+
+    void updateConfig(Config config);
     
 }
