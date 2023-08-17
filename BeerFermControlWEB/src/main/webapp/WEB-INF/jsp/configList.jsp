@@ -88,8 +88,8 @@
                         <h2><spring:message code="config.list" /></h2>
                     </div>
                     <div class="col-sm-4">
-                        <spring:url value="/config/add" var="URL_ADD_CONFIG" />
-                        <a class="btn btn-primary float-right" href="${URL_ADD_CONFIG}"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
+                        <spring:url value="/config" var="URL_CONFIG" />
+                        <a class="btn btn-primary float-right" href="${URL_CONFIG}/add"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
                     </div>
                 </div>
                 <c:if test="${empty requestScope[WebConstants.CONFIG_LIST]}">
@@ -98,42 +98,50 @@
                     </div>
                 </c:if>
                 <c:if test="${not empty requestScope[WebConstants.CONFIG_LIST]}">
-                    <table id="configList" class="table table-striped table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th><spring:message code="name" /></th>
-                                <th><spring:message code="start.date" /></th>
-                                <th><spring:message code="end.date" /></th>
-                                <th><spring:message code="tolerance" /></th>
-                                <th><spring:message code="cold.plug" /></th>
-                                <th><spring:message code="warm.plug" /></th>
-                                <th><spring:message code="hydrom" /></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <spring:message code="date.pattern" var="DATE_PATTERN" />
-                            <c:forEach items="${requestScope[WebConstants.CONFIG_LIST]}" var="config">
+                    <div class="mt-3">
+                        <table id="configList" class="table table-striped table-bordered" style="width:100%">
+                            <thead class="thead-dark">
                                 <tr>
-                                    <td><c:out value="config.name" /></td>
-                                    <td><fmt:formatDate pattern="${DATE_PATTERN}" value="${config.startDate}" /></td>
-                                    <td><fmt:formatDate pattern="${DATE_PATTERN}" value="${config.endDate}" /></td>
-                                    <td><fmt:formatNumber pattern="#.##" value="${config.tolerance}" /></td>
-                                    <td>
-                                        <c:if test="${empty config.tplinkCold}">-</c:if>
-                                        <c:if test="${not empty config.tplinkCold}"><c:out value="config.tplinkCold.name" /></c:if>
+                                    <th><spring:message code="name" /></th>
+                                    <th><spring:message code="start.date" /></th>
+                                    <th><spring:message code="end.date" /></th>
+                                    <th><spring:message code="tolerance" /></th>
+                                    <th><spring:message code="cold.plug" /></th>
+                                    <th><spring:message code="warm.plug" /></th>
+                                    <th><spring:message code="hydrom" /></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <spring:message code="date.pattern" var="DATE_PATTERN" />
+                                <c:forEach items="${requestScope[WebConstants.CONFIG_LIST]}" var="config">
+                                    <tr>
+                                        <td><c:out value="${config.name}" /></td>
+                                        <td><fmt:formatDate pattern="${DATE_PATTERN}" value="${config.startDate}" /></td>
+                                        <td><fmt:formatDate pattern="${DATE_PATTERN}" value="${config.endDate}" /></td>
+                                        <td><fmt:formatNumber pattern="#.##" value="${config.tolerance}" /></td>
+                                        <td>
+                                            <c:if test="${empty config.tplinkCold}">-</c:if>
+                                            <c:if test="${not empty config.tplinkCold}"><c:out value="config.tplinkCold.name" /></c:if>
                                         </td>
                                         <td>
-                                        <c:if test="${empty config.tplinkWarm}">-</c:if>
-                                        <c:if test="${not empty config.tplinkWarm}"><c:out value="config.tplinkWarm.name" /></c:if>
+                                            <c:if test="${empty config.tplinkWarm}">-</c:if>
+                                            <c:if test="${not empty config.tplinkWarm}"><c:out value="config.tplinkWarm.name" /></c:if>
                                         </td>
                                         <td>
-                                        <c:if test="${empty config.hydrom}">-</c:if>
-                                        <c:if test="${not empty config.hydrom}"><c:out value="config.hydrom.name" /></c:if>
+                                            <c:if test="${empty config.hydrom}">-</c:if>
+                                            <c:if test="${not empty config.hydrom}"><c:out value="config.hydrom.name" /></c:if>
+                                        </td>
+                                        <td>
+                                            <a href="${URL_CONFIG}/${config.id}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
+                                            <a href="${URL_CONFIG}/${config.id}/edit" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
+                                            <a href="${URL_CONFIG}/${config.id}/remove" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </c:if>
             </div>
         </main>
