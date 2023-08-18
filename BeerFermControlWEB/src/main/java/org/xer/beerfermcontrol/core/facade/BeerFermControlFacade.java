@@ -2,6 +2,7 @@ package org.xer.beerfermcontrol.core.facade;
 
 import java.util.List;
 import org.xer.beerfermcontrol.core.bean.Config;
+import org.xer.beerfermcontrol.core.bean.Hydrom;
 import org.xer.beerfermcontrol.core.bean.User;
 
 /**
@@ -23,5 +24,13 @@ public interface BeerFermControlFacade {
     void updateConfig(Config config);
 
     Config getFullConfig(Integer id, Integer userId);
+
+    void addHydrom(Hydrom newHydrom, Integer userId);
+
+    void removeHydrom(Integer id, Integer configId, Integer userId);
+
+    Hydrom getHydrom(Integer id, Integer configId, Integer userId);
+
+    void updateHydrom(Hydrom hydrom, Integer userId);
     
 }

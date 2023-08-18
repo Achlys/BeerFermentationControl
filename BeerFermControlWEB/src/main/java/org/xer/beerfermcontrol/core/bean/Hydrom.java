@@ -1,6 +1,7 @@
 package org.xer.beerfermcontrol.core.bean;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 
 /**
  *
@@ -10,6 +11,7 @@ public class Hydrom implements Serializable {
     
     private Integer id;
     private Integer configId;
+    @NotBlank
     private String name;
 
     public Integer getId() {

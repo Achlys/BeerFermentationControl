@@ -83,6 +83,14 @@
         </header>
         <main class="container-lg">
             <div class="mt-5">
+                <c:if test="${not empty requestScope[WebConstants.SUCCES_KEY]}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <spring:message code="${requestScope[WebConstants.SUCCES_KEY]}" />
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </c:if>
                 <div class="row">
                     <div class="col-sm-12">
                         <h2><spring:message code="config.details" /></h2>
@@ -202,48 +210,51 @@
                         <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkWarm}">
                             <c:set value="-" var="TPLINC_WARM_NAME" />
                             <c:set value="10" var="TPLINC_WARM_NAME_WIDTH" />
-                            <c:set value="2" var="TPLINC_WARM_BUTTONS_WIDTH" />
                         </c:if>
                         <c:if test="${not empty requestScope[WebConstants.CONFIG].tplinkWarm}">
                             <c:set value="${requestScope[WebConstants.CONFIG].tplinkWarm.name}" var="TPLINC_WARM_NAME" />
                             <c:set value="8" var="TPLINC_WARM_NAME_WIDTH" />
-                            <c:set value="4" var="TPLINC_WARM_BUTTONS_WIDTH" />
                         </c:if>
                         <div class="form-group col-md-${TPLINC_WARM_NAME_WIDTH}">
                             <label path="tplink.warm.name"><spring:message code="tplink.warm" /></label>
                             <input id="tplink.warm.name" type="text" class="form-control" readonly value="${TPLINC_WARM_NAME}" />
                         </div>
-                        <div class="form-group col-md-${TPLINC_WARM_BUTTONS_WIDTH}">
-                            <label>&nbsp;</label>
-                            <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkWarm}">
+                        <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkWarm}">
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
                                 <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/add/cold" var="URL_ADD_TPLINC_WARM" />
                                 <a href="${URL_ADD_TPLINC_WARM}" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> <spring:message code="add" /></a>
-                            </c:if>
-                            <c:if test="${not empty requestScope[WebConstants.CONFIG].tplinkWarm}">
-                                <div class="btn-group">
-                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkWarm.id}/edit" var="URL_EDIT_TPLINC_WARM" />
-                                    <a href="${URL_EDIT_TPLINC_WARM}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
-                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkWarm.id}/remove" var="URL_REMOVE_TPLINC_WARM" />
-                                    <a href="${URL_REMOVE_TPLINC_WARM}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
-                                </div>
-                            </c:if>
-                        </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${not empty requestScope[WebConstants.CONFIG].tplinkWarm}">
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkWarm.id}/edit" var="URL_EDIT_TPLINC_WARM" />
+                                <a href="${URL_EDIT_TPLINC_WARM}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkWarm.id}/remove" var="URL_REMOVE_TPLINC_WARM" />
+                                <a href="${URL_REMOVE_TPLINC_WARM}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
-                    ranges
-                </div>
-                <div class="tab-pane fade" id="readings" role="tabpanel" aria-labelledby="readings-tab">
-                    readings
-                </div>
-                <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
-                    events
-                </div>
             </div>
-        </main>
-        <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
-        <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-    </body>
+            <div class="tab-pane fade" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
+                ranges
+            </div>
+            <div class="tab-pane fade" id="readings" role="tabpanel" aria-labelledby="readings-tab">
+                readings
+            </div>
+            <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
+                events
+            </div>
+        </div>
+    </main>
+    <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
+    <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+</body>
 </html>

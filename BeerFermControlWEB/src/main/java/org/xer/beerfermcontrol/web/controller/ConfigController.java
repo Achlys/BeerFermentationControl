@@ -82,6 +82,7 @@ public class ConfigController {
         if (bindingResult.hasErrors()) {
             return "configAddEdit";
         }
+        config.setId(id);
         config.setUserId(((User) model.asMap().get(WebConstants.USER)).getId());
         beerFermControlFacade.updateConfig(config);
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.updated");
@@ -89,9 +90,12 @@ public class ConfigController {
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String loadConfig(@PathVariable("id") Integer id, Model model) {
+    public String loadConfig(@PathVariable("id") Integer id, Model model, @ModelAttribute(WebConstants.SUCCES_KEY) String succes) {
         Config config = beerFermControlFacade.getFullConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId());
         model.addAttribute(WebConstants.CONFIG, config);
+        if(succes != null){
+            model.addAttribute(WebConstants.SUCCES_KEY, succes);
+        }
         return "config";
     }
 

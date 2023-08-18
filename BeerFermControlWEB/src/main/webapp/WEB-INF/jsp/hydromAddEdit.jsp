@@ -48,11 +48,11 @@
                                     </c:otherwise>
                                 </c:choose>
                             </a>
-                            <c:if test="${empty requestScope[WebConstants.CONFIG].id}">
-                                <spring:url value="/config/add" var="URL_ADD_EDIT_CONFIG" />
+                            <c:if test="${empty requestScope[WebConstants.HYDROM].id}">
+                                <spring:url value="/config/${requestScope[WebConstants.HYDROM].configId}/hydrom/add" var="URL_ADD_EDIT_CONFIG" />
                             </c:if>
-                            <c:if test="${not empty requestScope[WebConstants.CONFIG].id}">
-                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/edit" var="URL_ADD_EDIT_CONFIG" />
+                            <c:if test="${not empty requestScope[WebConstants.HYDROM].id}">
+                                <spring:url value="/config/${requestScope[WebConstants.HYDROM].configId}/hydrom/${requestScope[WebConstants.HYDROM].id}/edit" var="URL_ADD_EDIT_CONFIG" />
                             </c:if>
                             <div class="dropdown-menu float-right" aria-labelledby="navbarDropdownMenuLink">
                                 <c:choose>
@@ -86,23 +86,23 @@
             </nav>
         </header>
         <main class="container-lg">
-            <form:form action="${URL_ADD_EDIT_CONFIG}" modelAttribute="${WebConstants.CONFIG}">
+            <form:form action="${URL_ADD_EDIT_CONFIG}" modelAttribute="${WebConstants.HYDROM}">
                 <div class="mt-5">
                     <div class="row">
                         <div class="col-sm-8">
                             <h2>
-                                <c:if test="${empty requestScope[WebConstants.CONFIG].id}">
-                                    <spring:message code="new.config" />
+                                <c:if test="${empty requestScope[WebConstants.HYDROM].id}">
+                                    <spring:message code="add.hydrom" />
                                 </c:if>
-                                <c:if test="${not empty requestScope[WebConstants.CONFIG].id}">
-                                    <spring:message code="edit.config" />
+                                <c:if test="${not empty requestScope[WebConstants.HYDROM].id}">
+                                    <spring:message code="edit.hydrom" />
                                 </c:if>
                             </h2>
                         </div>
                         <div class="col-sm-4">
                             <div class="btn-group float-right" role="group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
-                                <spring:url value="/configList" var="URL_BACK" />
+                                <spring:url value="/config/${requestScope[WebConstants.HYDROM].configId}" var="URL_BACK" />
                                 <a class="btn btn-secondary" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
                             </div>
                         </div>
@@ -116,55 +116,12 @@
                             <form:errors path="name" cssClass="invalid-feedback" />
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <form:label path="tolerance"><spring:message code="tolerance" /></form:label>
-                            <form:input path="tolerance" type="number" min="0" max="2" step="0.1" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
-                            <form:errors path="tolerance" cssClass="invalid-feedback" />
-                        </div>
-                        <spring:message code="date.input.pattern" var="dateInputPattern" />
-                        <div class="form-group col-md-4">
-                            <form:label path="startDate"><spring:message code="start.date" /></form:label>
-                                <div class="input-group">
-                                <form:input path="startDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" required="required" pattern="${dateInputPattern}" />
-                                <span class="input-group-append bg-white border-left-0">
-                                    <span class="input-group-text bg-transparent">
-                                        <i class="fa-regular fa-calendar"></i>
-                                    </span>
-                                </span>
-                                <form:errors path="startDate" cssClass="invalid-feedback" />
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <form:label path="endDate"><spring:message code="end.date" /></form:label>
-                                <div class="input-group">
-                                <form:input path="endDate" cssClass="form-control datepicker" cssErrorClass="form-control datepicker is-invalid" required="required" pattern="${dateInputPattern}" />
-                                <span class="input-group-append bg-white border-left-0">
-                                    <span class="input-group-text bg-transparent">
-                                        <i class="fa-regular fa-calendar"></i>
-                                    </span>
-                                </span>
-                                <form:errors path="endDate" cssClass="invalid-feedback" />
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </form:form>
         </main>
         <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
         <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
-        <c:if test="${language eq 'es'}">
-            <script src="${URL_STATIC}/js/datepicker-es.js"></script>
-        </c:if>
-        <c:if test="${language eq 'eu'}">
-            <script src="${URL_STATIC}/js/datepicker-eu.js"></script>
-        </c:if>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-        <script>
-            $(function () {
-                $(".datepicker").datepicker();
-            });
-        </script>
     </body>
 </html>
