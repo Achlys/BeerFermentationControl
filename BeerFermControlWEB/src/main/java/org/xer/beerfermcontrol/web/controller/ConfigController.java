@@ -15,7 +15,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -87,6 +86,13 @@ public class ConfigController {
         beerFermControlFacade.updateConfig(config);
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.updated");
         return "redirect:/configList";
+    }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String loadConfig(@PathVariable("id") Integer id, Model model) {
+        Config config = beerFermControlFacade.getFullConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId());
+        model.addAttribute(WebConstants.CONFIG, config);
+        return "config";
     }
 
 }

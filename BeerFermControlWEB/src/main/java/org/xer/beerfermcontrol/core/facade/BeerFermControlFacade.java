@@ -21,5 +21,7 @@ public interface BeerFermControlFacade {
     Config getConfig(Integer id, Integer userId);
 
     void updateConfig(Config config);
+
+    Config getFullConfig(Integer id, Integer userId);
     
 }

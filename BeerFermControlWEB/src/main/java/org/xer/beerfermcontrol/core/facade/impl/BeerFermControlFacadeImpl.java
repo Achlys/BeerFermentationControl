@@ -7,6 +7,7 @@ import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.dao.ConfigDao;
 import org.xer.beerfermcontrol.core.dao.HydromDao;
+import org.xer.beerfermcontrol.core.dao.RangeDao;
 import org.xer.beerfermcontrol.core.dao.TplinkDao;
 import org.xer.beerfermcontrol.core.dao.UserDao;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
@@ -23,6 +24,8 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     private ConfigDao configDao;
     @Autowired
     private HydromDao hydromDao;
+    @Autowired
+    private RangeDao rangeDao;
     @Autowired
     private TplinkDao tplinkDao;
     @Autowired
@@ -69,6 +72,16 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     @Override
     public void updateConfig(Config config) {
         configDao.updateConfig(config);
+    }
+
+    @Override
+    public Config getFullConfig(Integer id, Integer userId) {
+        Config config = configDao.getConfig(id, userId);
+        config.setTplinkCold(tplinkDao.getTplinkByConfig(config.getId(), CoreConstants.TPLINK_TYPE_COLD));
+        config.setTplinkWarm(tplinkDao.getTplinkByConfig(config.getId(), CoreConstants.TPLINK_TYPE_WARM));
+        config.setHydrom(hydromDao.getHydromByConfig(config.getId()));
+        config.setRanges(rangeDao.getRangesByConfig(config.getId()));
+        return config;
     }
 
 }

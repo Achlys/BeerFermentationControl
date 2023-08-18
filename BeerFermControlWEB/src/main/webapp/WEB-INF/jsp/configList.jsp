@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -155,19 +155,7 @@
         </main>
         <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
         <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
-        <c:if test="${language eq 'es'}">
-            <script src="${URL_STATIC}/js/datepicker-es.js"></script>
-        </c:if>
-        <c:if test="${language eq 'eu'}">
-            <script src="${URL_STATIC}/js/datepicker-eu.js"></script>
-        </c:if>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-        <script>
-            $.datepicker.setDefaults($.datepicker.regional[ "${language}" ]);
-            $(function () {
-                new DataTable('#configList');
-            });
-        </script>
     </body>
 </html>

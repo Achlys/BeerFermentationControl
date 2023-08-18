@@ -12,7 +12,7 @@ public class Range implements Serializable {
     private Integer configId;
     private Double topGravity;
     private Double bottomGravity;
-    private Double objTemp;
+    private Double aimedTemp;
 
     public Integer getId() {
         return id;
@@ -46,12 +46,12 @@ public class Range implements Serializable {
         this.bottomGravity = bottomGravity;
     }
 
-    public Double getObjTemp() {
-        return objTemp;
+    public Double getAimedTemp() {
+        return aimedTemp;
     }
 
-    public void setObjTemp(Double objTemp) {
-        this.objTemp = objTemp;
+    public void setAimedTemp(Double aimedTemp) {
+        this.aimedTemp = aimedTemp;
     }
     
 }
