@@ -1,5 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page import="org.xer.beerfermcontrol.web.util.WebConstants" %>
+<%@ page import="org.xer.beerfermcontrol.core.util.CoreConstants" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -48,27 +49,36 @@
                                     </c:otherwise>
                                 </c:choose>
                             </a>
-                            <c:if test="${empty requestScope[WebConstants.HYDROM].id}">
-                                <spring:url value="/config/${requestScope[WebConstants.HYDROM].configId}/hydrom/add" var="URL_ADD_EDIT_HYDROM" />
+                            <c:if test="${requestScope[WebConstants.TPLINK].type eq CoreConstants.TPLINK_TYPE_COLD}">
+                                <c:if test="${empty requestScope[WebConstants.TPLINK].id}">
+                                    <spring:url value="/config/${requestScope[WebConstants.TPLINK].configId}/tplink/add/cold" var="URL_ADD_EDIT_TPLINK" />
+                                </c:if>
+                                <spring:message code="cold.plug" var="TYPE_DESC" />
                             </c:if>
-                            <c:if test="${not empty requestScope[WebConstants.HYDROM].id}">
-                                <spring:url value="/config/${requestScope[WebConstants.HYDROM].configId}/hydrom/${requestScope[WebConstants.HYDROM].id}/edit" var="URL_ADD_EDIT_HYDROM" />
+                            <c:if test="${requestScope[WebConstants.TPLINK].type eq CoreConstants.TPLINK_TYPE_WARM}">
+                                <c:if test="${empty requestScope[WebConstants.TPLINK].id}">
+                                    <spring:url value="/config/${requestScope[WebConstants.TPLINK].configId}/tplink/add/warm" var="URL_ADD_EDIT_TPLINK" />
+                                </c:if>
+                                <spring:message code="warm.plug" var="TYPE_DESC" />
+                            </c:if>
+                            <c:if test="${not empty requestScope[WebConstants.TPLINK].id}">
+                                <spring:url value="/config/${requestScope[WebConstants.TPLINK].configId}/tplink/${requestScope[WebConstants.TPLINK].id}/edit" var="URL_ADD_EDIT_TPLINK" />
                             </c:if>
                             <div class="dropdown-menu float-right" aria-labelledby="navbarDropdownMenuLink">
                                 <c:choose>
                                     <c:when test="${language eq 'es'}">
-                                        <a class="dropdown-item" href="${URL_ADD_EDIT_HYDROM}?language=eu">Euskara</a>
+                                        <a class="dropdown-item" href="${URL_ADD_EDIT_TPLINK}?language=eu">Euskara</a>
                                         <a class="dropdown-item active" href="#">Español</a>
-                                        <a class="dropdown-item" href="${URL_ADD_EDIT_HYDROM}?language=en">English</a>
+                                        <a class="dropdown-item" href="${URL_ADD_EDIT_TPLINK}?language=en">English</a>
                                     </c:when>
                                     <c:when test="${language eq 'eu'}">
                                         <a class="dropdown-item active" href="#">Euskara</a>
-                                        <a class="dropdown-item" href="${URL_ADD_EDIT_HYDROM}?language=es">Español</a>
-                                        <a class="dropdown-item" href="${URL_ADD_EDIT_HYDROM}?language=en">English</a>
+                                        <a class="dropdown-item" href="${URL_ADD_EDIT_TPLINK}?language=es">Español</a>
+                                        <a class="dropdown-item" href="${URL_ADD_EDIT_TPLINK}?language=en">English</a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a class="dropdown-item" href="${URL_ADD_EDIT_HYDROM}?language=eu">Euskara</a>
-                                        <a class="dropdown-item" href="${URL_ADD_EDIT_HYDROM}?language=es">Español</a>
+                                        <a class="dropdown-item" href="${URL_ADD_EDIT_TPLINK}?language=eu">Euskara</a>
+                                        <a class="dropdown-item" href="${URL_ADD_EDIT_TPLINK}?language=es">Español</a>
                                         <a class="dropdown-item active" href="#">English</a>
                                     </c:otherwise>
                                 </c:choose>
@@ -86,23 +96,23 @@
             </nav>
         </header>
         <main class="container-lg">
-            <form:form action="${URL_ADD_EDIT_HYDROM}" modelAttribute="${WebConstants.HYDROM}">
+            <form:form action="${URL_ADD_EDIT_TPLINK}" modelAttribute="${WebConstants.TPLINK}">
                 <div class="mt-5">
                     <div class="row">
                         <div class="col-sm-8">
                             <h2>
-                                <c:if test="${empty requestScope[WebConstants.HYDROM].id}">
-                                    <spring:message code="add.hydrom" />
+                                <c:if test="${empty requestScope[WebConstants.TPLINK].id}">
+                                    <spring:message code="add.tplink" />
                                 </c:if>
-                                <c:if test="${not empty requestScope[WebConstants.HYDROM].id}">
-                                    <spring:message code="edit.hydrom" />
+                                <c:if test="${not empty requestScope[WebConstants.TPLINK].id}">
+                                    <spring:message code="edit.tplink" />
                                 </c:if>
                             </h2>
                         </div>
                         <div class="col-sm-4">
                             <div class="btn-group float-right" role="group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
-                                <spring:url value="/config/${requestScope[WebConstants.HYDROM].configId}" var="URL_BACK" />
+                                <spring:url value="/config/${requestScope[WebConstants.TPLINK].configId}" var="URL_BACK" />
                                 <a class="btn btn-secondary" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
                             </div>
                         </div>
@@ -114,6 +124,17 @@
                             <form:label path="name"><spring:message code="name" /></form:label>
                             <form:input path="name" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
                             <form:errors path="name" cssClass="invalid-feedback" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label path="typePlain"><spring:message code="type" /></label>
+                            <input type="text" id="typePlain" class="form-control-plaintext" readonly value="${TYPE_DESC}" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <form:label path="ip"><spring:message code="ip" /></form:label>
+                            <form:input path="ip" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" placeholder="###.###.###.###" />
+                            <form:errors path="ip" cssClass="invalid-feedback" />
                         </div>
                     </div>
                 </div>

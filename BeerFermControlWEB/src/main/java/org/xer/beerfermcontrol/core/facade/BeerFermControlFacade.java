@@ -3,6 +3,7 @@ package org.xer.beerfermcontrol.core.facade;
 import java.util.List;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
+import org.xer.beerfermcontrol.core.bean.Tplink;
 import org.xer.beerfermcontrol.core.bean.User;
 
 /**
@@ -32,5 +33,13 @@ public interface BeerFermControlFacade {
     Hydrom getHydrom(Integer id, Integer configId, Integer userId);
 
     void updateHydrom(Hydrom hydrom, Integer userId);
+
+    void addTplink(Tplink tplink, Integer userId);
+
+    void removeTplink(Integer id, Integer configId, Integer userId);
+
+    Tplink getTplink(Integer id, Integer configId, Integer userId);
+
+    void updateTplink(Tplink tplink, Integer userId);
     
 }

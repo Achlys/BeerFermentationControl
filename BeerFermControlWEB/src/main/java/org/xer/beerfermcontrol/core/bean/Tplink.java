@@ -1,6 +1,8 @@
 package org.xer.beerfermcontrol.core.bean;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -10,8 +12,11 @@ public class Tplink implements Serializable {
     
     private Integer id;
     private Integer configId;
+    @NotBlank
     private String name;
     private String type;
+    @NotBlank
+    @Pattern(regexp = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")
     private String ip;
 
     public Integer getId() {

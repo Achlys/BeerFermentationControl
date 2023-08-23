@@ -96,7 +96,11 @@
                         <h2><spring:message code="config.details" /></h2>
                     </div>
                     <div class="col-sm-4">
-                        <a class="btn btn-primary float-right" href="${URL_INDEX}"><i class="fa-solid fa-arrow-left"></i> <spring:message code="back" /></a>
+                        <div class="btn-group float-right" role="group">
+                            <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/edit" var="URL_EDIT_CONFIG" />
+                            <a href="${URL_EDIT_CONFIG}" class="btn btn-primary"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
+                            <a class="btn btn-secondary" href="${URL_INDEX}"><i class="fa-solid fa-arrow-left"></i> <spring:message code="back" /></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -251,15 +255,15 @@
                         </c:if>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
-                ranges
-            </div>
-            <div class="tab-pane fade" id="readings" role="tabpanel" aria-labelledby="readings-tab">
-                readings
-            </div>
-            <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
-                events
+                <div class="tab-pane fade" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
+                    ranges
+                </div>
+                <div class="tab-pane fade" id="readings" role="tabpanel" aria-labelledby="readings-tab">
+                    readings
+                </div>
+                <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
+                    events
+                </div>
             </div>
         </div>
     </main>

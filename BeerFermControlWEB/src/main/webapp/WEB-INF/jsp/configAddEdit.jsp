@@ -93,16 +93,17 @@
                             <h2>
                                 <c:if test="${empty requestScope[WebConstants.CONFIG].id}">
                                     <spring:message code="new.config" />
+                                    <spring:url value="/configList" var="URL_BACK" />
                                 </c:if>
                                 <c:if test="${not empty requestScope[WebConstants.CONFIG].id}">
                                     <spring:message code="edit.config" />
+                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}" var="URL_BACK" />
                                 </c:if>
                             </h2>
                         </div>
                         <div class="col-sm-4">
                             <div class="btn-group float-right" role="group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
-                                <spring:url value="/configList" var="URL_BACK" />
                                 <a class="btn btn-secondary" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
                             </div>
                         </div>

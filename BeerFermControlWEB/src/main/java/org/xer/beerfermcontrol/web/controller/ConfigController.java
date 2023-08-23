@@ -61,7 +61,7 @@ public class ConfigController {
         newConfig.setUserId(((User) model.asMap().get(WebConstants.USER)).getId());
         beerFermControlFacade.addConfig(newConfig);
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.added");
-        return "redirect:/configList";
+        return "redirect:/config/" + newConfig.getId();
     }
     
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.GET)
@@ -86,7 +86,7 @@ public class ConfigController {
         config.setUserId(((User) model.asMap().get(WebConstants.USER)).getId());
         beerFermControlFacade.updateConfig(config);
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.updated");
-        return "redirect:/configList";
+        return "redirect:/config/" + id;
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

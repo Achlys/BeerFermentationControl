@@ -58,9 +58,10 @@ public class ConfigDaoImpl implements ConfigDao {
                 }
             }
         });
+        config.setId(id);
         sql = "INSERT INTO CONFIG (ID, USERS_ID, NAME, TOLERANCE, START_DATE, END_DATE) VALUES (:id, :userId, :name, :tolerance, :startDate, :endDate)";
         Map parameters = new HashMap();
-        parameters.put("id", id);
+        parameters.put("id", config.getId());
         parameters.put("userId", config.getUserId());
         parameters.put("name", config.getName());
         parameters.put("tolerance", config.getTolerance());

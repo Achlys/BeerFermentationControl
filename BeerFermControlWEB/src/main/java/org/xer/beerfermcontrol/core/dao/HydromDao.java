@@ -17,5 +17,5 @@ public interface HydromDao {
     Hydrom getHydrom(Integer id, Integer configId);
 
     void updateHydrom(Hydrom hydrom);
-    
+
 }
