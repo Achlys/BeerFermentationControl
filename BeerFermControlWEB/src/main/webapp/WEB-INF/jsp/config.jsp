@@ -92,10 +92,13 @@
                     </div>
                 </c:if>
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-8">
                         <h2><spring:message code="config.details" /></h2>
                     </div>
-                </div>   
+                    <div class="col-sm-4">
+                        <a class="btn btn-primary float-right" href="${URL_INDEX}"><i class="fa-solid fa-arrow-left"></i> <spring:message code="back" /></a>
+                    </div>
+                </div>
             </div>
             <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -159,21 +162,25 @@
                             <label path="hydrom.name"><spring:message code="hydrom" /></label>
                             <input id="hydrom.name" type="text" class="form-control" readonly value="${HYDROM_NAME}" />
                         </div>
-                        <div class="form-group col-md-${HYDROM_BUTTONS_WIDTH}">
-                            <label>&nbsp;</label>
-                            <c:if test="${empty requestScope[WebConstants.CONFIG].hydrom}">
+                        <c:if test="${empty requestScope[WebConstants.CONFIG].hydrom}">
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
                                 <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/hydrom/add" var="URL_ADD_HYDROM" />
                                 <a href="${URL_ADD_HYDROM}" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> <spring:message code="add" /></a>
-                            </c:if>
-                            <c:if test="${not empty requestScope[WebConstants.CONFIG].hydrom}">
-                                <div class="btn-group">
-                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/hydrom/${requestScope[WebConstants.CONFIG].hydrom.id}/edit" var="URL_EDIT_HYDROM" />
-                                    <a href="${URL_EDIT_HYDROM}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
-                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/hydrom/${requestScope[WebConstants.CONFIG].hydrom.id}/remove" var="URL_REMOVE_HYDROM" />
-                                    <a href="${URL_REMOVE_HYDROM}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
-                                </div>
-                            </c:if>
-                        </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${not empty requestScope[WebConstants.CONFIG].hydrom}">
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/hydrom/${requestScope[WebConstants.CONFIG].hydrom.id}/edit" var="URL_EDIT_HYDROM" />
+                                <a href="${URL_EDIT_HYDROM}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/hydrom/${requestScope[WebConstants.CONFIG].hydrom.id}/remove" var="URL_REMOVE_HYDROM" />
+                                <a href="${URL_REMOVE_HYDROM}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
+                            </div>
+                        </c:if>
                     </div>
                     <div class="form-row">
                         <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkCold}">
@@ -190,21 +197,25 @@
                             <label path="tplink.cold.name"><spring:message code="tplink.cold" /></label>
                             <input id="tplink.cold.name" type="text" class="form-control" readonly value="${TPLINC_COLD_NAME}" />
                         </div>
-                        <div class="form-group col-md-${TPLINC_COLD_BUTTONS_WIDTH}">
-                            <label>&nbsp;</label>
-                            <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkCold}">
+                        <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkCold}">
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
                                 <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/add/cold" var="URL_ADD_TPLINC_COLD" />
                                 <a href="${URL_ADD_TPLINC_COLD}" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> <spring:message code="add" /></a>
-                            </c:if>
-                            <c:if test="${not empty requestScope[WebConstants.CONFIG].tplinkCold}">
-                                <div class="btn-group">
-                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkCold.id}/edit" var="URL_EDIT_TPLINC_COLD" />
-                                    <a href="${URL_EDIT_TPLINC_COLD}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
-                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkCold.id}/remove" var="URL_REMOVE_TPLINC_COLD" />
-                                    <a href="${URL_REMOVE_TPLINC_COLD}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
-                                </div>
-                            </c:if>
-                        </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${not empty requestScope[WebConstants.CONFIG].tplinkCold}">
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkCold.id}/edit" var="URL_EDIT_TPLINC_COLD" />
+                                <a href="${URL_EDIT_TPLINC_COLD}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <spring:message code="edit" /></a>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>&nbsp;</label>
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/${requestScope[WebConstants.CONFIG].tplinkCold.id}/remove" var="URL_REMOVE_TPLINC_COLD" />
+                                <a href="${URL_REMOVE_TPLINC_COLD}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
+                            </div>
+                        </c:if>
                     </div>
                     <div class="form-row">
                         <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkWarm}">
@@ -222,7 +233,7 @@
                         <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkWarm}">
                             <div class="form-group col-md-2">
                                 <label>&nbsp;</label>
-                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/add/cold" var="URL_ADD_TPLINC_WARM" />
+                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/tplink/add/warm" var="URL_ADD_TPLINC_WARM" />
                                 <a href="${URL_ADD_TPLINC_WARM}" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> <spring:message code="add" /></a>
                             </div>
                         </c:if>

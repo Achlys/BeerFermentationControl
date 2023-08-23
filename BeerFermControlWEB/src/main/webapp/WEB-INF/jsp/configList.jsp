@@ -130,15 +130,15 @@
                                         <td><fmt:formatNumber pattern="#.##" value="${config.tolerance}" /></td>
                                         <td>
                                             <c:if test="${empty config.tplinkCold}">-</c:if>
-                                            <c:if test="${not empty config.tplinkCold}"><c:out value="config.tplinkCold.name" /></c:if>
+                                            <c:if test="${not empty config.tplinkCold}"><c:out value="${config.tplinkCold.name}" /></c:if>
                                             </td>
                                             <td>
                                             <c:if test="${empty config.tplinkWarm}">-</c:if>
-                                            <c:if test="${not empty config.tplinkWarm}"><c:out value="config.tplinkWarm.name" /></c:if>
+                                            <c:if test="${not empty config.tplinkWarm}"><c:out value="${config.tplinkWarm.name}" /></c:if>
                                             </td>
                                             <td>
                                             <c:if test="${empty config.hydrom}">-</c:if>
-                                            <c:if test="${not empty config.hydrom}"><c:out value="config.hydrom.name" /></c:if>
+                                            <c:if test="${not empty config.hydrom}"><c:out value="${config.hydrom.name}" /></c:if>
                                             </td>
                                             <td>
                                                 <a href="${URL_CONFIG}/${config.id}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
