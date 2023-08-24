@@ -1,6 +1,7 @@
 package org.xer.beerfermcontrol.core.bean;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -10,8 +11,11 @@ public class Range implements Serializable {
     
     private Integer id;
     private Integer configId;
+    @NotNull
     private Double topGravity;
+    @NotNull
     private Double bottomGravity;
+    @NotNull
     private Double aimedTemp;
 
     public Integer getId() {

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
+import org.xer.beerfermcontrol.core.bean.Range;
 import org.xer.beerfermcontrol.core.bean.Tplink;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.dao.ConfigDao;
@@ -139,6 +140,35 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     public void updateTplink(Tplink tplink, Integer userId) {
         this.checkConfigForUser(tplink.getConfigId(), userId);
         tplinkDao.updateTplink(tplink);
+    }
+
+    @Override
+    public void addRange(Range range, Integer userId) {
+        this.checkConfigForUser(range.getConfigId(), userId);
+        rangeDao.addRange(range);
+    }
+
+    @Override
+    public void removeRange(Integer id, Integer configId, Integer userId) {
+        this.checkConfigForUser(configId, userId);
+        rangeDao.removeRange(id, configId);
+    }
+
+    @Override
+    public Range getRange(Integer id, Integer configId, Integer userId) {
+        this.checkConfigForUser(configId, userId);
+        return rangeDao.getRange(id, configId);
+    }
+
+    @Override
+    public void updateRange(Range range, Integer userId) {
+        this.checkConfigForUser(range.getConfigId(), userId);
+        rangeDao.updateRange(range);
+    }
+
+    @Override
+    public boolean overlapsOtherRange(Range range, boolean exceptItself) {
+        return rangeDao.overlapsOtherRange(range, exceptItself);
     }
 
 }

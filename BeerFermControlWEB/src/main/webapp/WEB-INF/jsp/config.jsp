@@ -256,7 +256,47 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
-                    ranges
+                    <div class="row mt-3">
+                        <div class="col-sm-8">
+                            <h3><spring:message code="range.list" /></h3>
+                        </div>
+                        <div class="col-sm-4">
+                            <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/range" var="URL_RANGE" />
+                            <a class="btn btn-primary float-right" href="${URL_RANGE}/add"><i class="fa fa-plus"></i> <spring:message code="add.new" /></a>
+                        </div>
+                    </div>
+                    <c:if test="${empty requestScope[WebConstants.CONFIG].ranges}">
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <spring:message code="empty.list" />
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty requestScope[WebConstants.CONFIG].ranges}">
+                        <div class="mt-3">
+                            <table id="configList" class="table table-striped table-bordered w-100">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th><spring:message code="top.gravity" /></th>
+                                        <th><spring:message code="bottom.gravity" /></th>
+                                        <th><spring:message code="aimed.temperature" /></th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${requestScope[WebConstants.CONFIG].ranges}" var="range">
+                                        <tr>
+                                            <td><fmt:formatNumber pattern="0.000" value="${range.topGravity}" /></td>
+                                            <td><fmt:formatNumber pattern="0.000" value="${range.bottomGravity}" /></td>
+                                            <td><fmt:formatNumber pattern="0.#" value="${range.aimedTemp}" /></td>
+                                            <td class="text-center">
+                                                <a href="${URL_RANGE}/${range.id}/edit" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
+                                                <a href="${URL_RANGE}/${range.id}/remove" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </c:if>
                 </div>
                 <div class="tab-pane fade" id="readings" role="tabpanel" aria-labelledby="readings-tab">
                     readings

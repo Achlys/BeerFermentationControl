@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.format.datetime.DateFormatter;
-import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
+import org.xer.beerfermcontrol.web.util.DecimalPropertyEditor;
 import org.xer.beerfermcontrol.web.util.WebConstants;
 
 /**
@@ -44,7 +44,7 @@ public class ConfigController {
     @InitBinder
     public void initBinder(Locale locale, WebDataBinder dataBinder) {
         dataBinder.addCustomFormatter(new DateFormatter(messageSource.getMessage("date.pattern", null, locale)));
-        dataBinder.addCustomFormatter(new NumberStyleFormatter());
+        dataBinder.registerCustomEditor(Double.class, new DecimalPropertyEditor(locale));
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -63,20 +63,20 @@ public class ConfigController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.added");
         return "redirect:/config/" + newConfig.getId();
     }
-    
+
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.GET)
     public String remove(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         beerFermControlFacade.removeConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId());
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.removed");
         return "redirect:/configList";
     }
-    
+
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public String loadEdit(@PathVariable("id") Integer id, Model model) {
         model.addAttribute(WebConstants.CONFIG, beerFermControlFacade.getConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId()));
         return "configAddEdit";
     }
-    
+
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
     public String edit(@PathVariable("id") Integer id, @Valid @ModelAttribute(WebConstants.CONFIG) Config config, BindingResult bindingResult, Model model, RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
@@ -88,12 +88,12 @@ public class ConfigController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.config.updated");
         return "redirect:/config/" + id;
     }
-    
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String loadConfig(@PathVariable("id") Integer id, Model model, @ModelAttribute(WebConstants.SUCCES_KEY) String succes) {
         Config config = beerFermControlFacade.getFullConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId());
         model.addAttribute(WebConstants.CONFIG, config);
-        if(succes != null){
+        if (succes != null) {
             model.addAttribute(WebConstants.SUCCES_KEY, succes);
         }
         return "config";

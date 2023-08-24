@@ -107,7 +107,7 @@
                 </c:if>
                 <c:if test="${not empty requestScope[WebConstants.CONFIG_LIST]}">
                     <div class="mt-3">
-                        <table id="configList" class="table table-striped table-bordered" style="width:100%">
+                        <table id="configList" class="table table-striped table-bordered w-100">
                             <thead class="thead-dark">
                                 <tr>
                                     <th><spring:message code="name" /></th>
@@ -140,7 +140,7 @@
                                             <c:if test="${empty config.hydrom}">-</c:if>
                                             <c:if test="${not empty config.hydrom}"><c:out value="${config.hydrom.name}" /></c:if>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <a href="${URL_CONFIG}/${config.id}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
                                             <a href="${URL_CONFIG}/${config.id}/edit" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
                                             <a href="${URL_CONFIG}/${config.id}/remove" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
