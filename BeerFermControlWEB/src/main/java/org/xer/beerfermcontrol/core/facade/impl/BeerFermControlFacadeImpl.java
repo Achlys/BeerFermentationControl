@@ -67,7 +67,22 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     @Override
     @Transactional
     public void removeConfig(Integer id, Integer userId) {
+        Config config = this.getFullConfig(id, userId);
         configDao.removeConfig(id, userId);
+        if(config.getHydrom() != null){
+            this.removeHydrom(config.getHydrom().getId(), id, userId);
+        }
+        if(config.getTplinkCold() != null){
+            this.removeTplink(config.getTplinkCold().getId(), id, userId);
+        }
+        if(config.getTplinkWarm()!= null){
+            this.removeTplink(config.getTplinkWarm().getId(), id, userId);
+        }
+        if(config.getRanges() != null){
+            for(Range range : config.getRanges()){
+                this.removeRange(range.getId(), id, userId);
+            }
+        }
     }
 
     @Override
