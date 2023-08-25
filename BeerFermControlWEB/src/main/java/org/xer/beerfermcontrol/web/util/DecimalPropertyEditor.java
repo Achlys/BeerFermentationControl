@@ -20,12 +20,20 @@ public class DecimalPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public String getAsText() {
-        return this.df.format(this.getValue());
+        if(this.getValue() == null){
+            return "";
+        }else{
+            return this.df.format(this.getValue());
+        }
     }
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        this.setValue(Double.valueOf(text));
+        if(text == null || "".equals(text.trim())){
+            this.setValue(null);
+        }else{
+            this.setValue(Double.valueOf(text));
+        }
     }
 
 }

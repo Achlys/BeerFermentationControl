@@ -143,7 +143,7 @@
                                             <td class="text-center">
                                                 <a href="${URL_CONFIG}/${config.id}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
                                             <a href="${URL_CONFIG}/${config.id}/edit" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
-                                            <a href="${URL_CONFIG}/${config.id}/remove" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                            <a type="button" href="javascript:fncShowModal(${config.id});" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -152,10 +152,36 @@
                     </div>
                 </c:if>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="removeConfigModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="removeConfigLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="removeConfigLabel"><spring:message code="remove" /></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><spring:message code="ask.remove.config" /></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><spring:message code="cancel" /></button>
+                            <a id="removeConfigModalButton" href="#" class="btn btn-danger"><i class="far fa-trash-alt"></i> <spring:message code="remove" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
         <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
         <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+        <script>
+            function fncShowModal(id){
+                $("#removeConfigModalButton").attr('href', '${URL_CONFIG}/' + id + '/remove');
+                $("#removeConfigModal").modal('show');
+            }
+        </script>
     </body>
 </html>
