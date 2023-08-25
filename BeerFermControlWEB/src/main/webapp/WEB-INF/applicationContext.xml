@@ -11,7 +11,7 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     
     <!-- Enable annotation driven configuration -->
-    <context:annotation-config/>
+    <context:annotation-config />
     
     <!-- Provide support for component scanning -->
     <context:component-scan base-package="org.xer.beerfermcontrol.core" />
@@ -31,5 +31,12 @@
         <property name="defaultEncoding" value="UTF-8" />
         <property name="useCodeAsDefaultMessage" value="true" />
     </bean>
+    
+    <!-- Provide transactional management -->
+    <tx:annotation-driven />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="beerFermControlDataSource" />
+    </bean>
+    
 
 </beans>

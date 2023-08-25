@@ -3,6 +3,7 @@ package org.xer.beerfermcontrol.core.facade.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
 import org.xer.beerfermcontrol.core.bean.Range;
@@ -58,11 +59,13 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
+    @Transactional
     public void addConfig(Config newConfig) {
         configDao.addConfig(newConfig);
     }
 
     @Override
+    @Transactional
     public void removeConfig(Integer id, Integer userId) {
         configDao.removeConfig(id, userId);
     }
@@ -73,6 +76,7 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
+    @Transactional
     public void updateConfig(Config config) {
         configDao.updateConfig(config);
     }
@@ -95,12 +99,14 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
+    @Transactional
     public void addHydrom(Hydrom newHydrom, Integer userId) {
         this.checkConfigForUser(newHydrom.getConfigId(), userId);
         hydromDao.addHydrom(newHydrom);
     }
 
     @Override
+    @Transactional
     public void removeHydrom(Integer id, Integer configId, Integer userId) {
         this.checkConfigForUser(configId, userId);
         hydromDao.removeHydrom(id, configId);
@@ -113,18 +119,21 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
+    @Transactional
     public void updateHydrom(Hydrom hydrom, Integer userId) {
         this.checkConfigForUser(hydrom.getConfigId(), userId);
         hydromDao.updateHydrom(hydrom);
     }
 
     @Override
+    @Transactional
     public void addTplink(Tplink tplink, Integer userId) {
         this.checkConfigForUser(tplink.getConfigId(), userId);
         tplinkDao.addTplink(tplink);
     }
 
     @Override
+    @Transactional
     public void removeTplink(Integer id, Integer configId, Integer userId) {
         this.checkConfigForUser(configId, userId);
         tplinkDao.removeTplink(id, configId);
@@ -137,18 +146,21 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
+    @Transactional
     public void updateTplink(Tplink tplink, Integer userId) {
         this.checkConfigForUser(tplink.getConfigId(), userId);
         tplinkDao.updateTplink(tplink);
     }
 
     @Override
+    @Transactional
     public void addRange(Range range, Integer userId) {
         this.checkConfigForUser(range.getConfigId(), userId);
         rangeDao.addRange(range);
     }
 
     @Override
+    @Transactional
     public void removeRange(Integer id, Integer configId, Integer userId) {
         this.checkConfigForUser(configId, userId);
         rangeDao.removeRange(id, configId);
@@ -161,6 +173,7 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
+    @Transactional
     public void updateRange(Range range, Integer userId) {
         this.checkConfigForUser(range.getConfigId(), userId);
         rangeDao.updateRange(range);
