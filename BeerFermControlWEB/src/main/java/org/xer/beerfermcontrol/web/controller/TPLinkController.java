@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.xer.beerfermcontrol.core.bean.Tplink;
@@ -104,5 +105,17 @@ public class TPLinkController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.tplink.updated");
         return "redirect:/config/" + configId;
     }
+    
+    @RequestMapping(value = "/{id}/encender", method = RequestMethod.GET)
+    @ResponseBody
+    public String encender(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id){
+        return beerFermControlFacade.encender(id, configId);
+    }
 
+    @RequestMapping(value = "/{id}/apagar", method = RequestMethod.GET)
+    @ResponseBody
+    public String apagar(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id){
+        return beerFermControlFacade.apagar(id, configId);
+    }
+    
 }

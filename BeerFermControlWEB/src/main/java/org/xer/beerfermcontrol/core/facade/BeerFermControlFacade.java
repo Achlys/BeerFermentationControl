@@ -52,5 +52,9 @@ public interface BeerFermControlFacade {
     void updateRange(Range range, Integer userId);
 
     boolean overlapsOtherRange(Range range, boolean exceptItself);
+
+    String encender(Integer id, Integer configId);
+
+    String apagar(Integer id, Integer configId);
     
 }

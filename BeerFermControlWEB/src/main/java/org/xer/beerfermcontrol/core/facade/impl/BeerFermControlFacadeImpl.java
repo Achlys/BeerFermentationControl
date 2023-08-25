@@ -199,4 +199,18 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
         return rangeDao.overlapsOtherRange(range, exceptItself);
     }
 
+    @Override
+    public String encender(Integer id, Integer configId) {
+        Tplink tplink = tplinkDao.getTplink(id, configId);
+        String operation = "{\"system\":{\"set_relay_state\":{\"state\":1}}}";
+        return "OK";
+    }
+
+    @Override
+    public String apagar(Integer id, Integer configId) {
+        Tplink tplink = tplinkDao.getTplink(id, configId);
+        String operation = "{\"system\":{\"set_relay_state\":{\"state\":1}}}";
+        return "OK";
+    }
+
 }
