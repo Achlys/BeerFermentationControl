@@ -102,7 +102,7 @@
                         <div class="col-sm-4">
                             <div class="btn-group float-right" role="group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-disk"></i> <spring:message code="save" /></button>
-                                <spring:url value="/config/${requestScope[WebConstants.RANGE].configId}" var="URL_BACK" />
+                                <spring:url value="/config/${requestScope[WebConstants.RANGE].configId}?${WebConstants.TAB}=${WebConstants.TAB_RANGES}" var="URL_BACK" />
                                 <a class="btn btn-secondary" href="${URL_BACK}"><i class="fa fa-xmark"></i> <spring:message code="cancel" /></a>
                             </div>
                         </div>

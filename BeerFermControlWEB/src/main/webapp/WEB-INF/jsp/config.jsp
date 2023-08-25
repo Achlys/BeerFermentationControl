@@ -50,7 +50,12 @@
                                 </c:choose>
                             </a>
                             <div class="dropdown-menu float-right" aria-labelledby="navbarDropdownMenuLink">
-                                <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}?language=" var="URL_LOCALE_CHANGE" />
+                                <c:if test="${empty param[WebConstants.TAB]}">
+                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}?language=" var="URL_LOCALE_CHANGE" />
+                                </c:if>
+                                <c:if test="${not empty param[WebConstants.TAB]}">
+                                    <spring:url value="/config/${requestScope[WebConstants.CONFIG].id}?${WebConstants.TAB}=${requestScope[WebConstants.TAB]}&language=" var="URL_LOCALE_CHANGE" />
+                                </c:if>
                                 <c:choose>
                                     <c:when test="${language eq 'es'}">
                                         <a class="dropdown-item" href="${URL_LOCALE_CHANGE}eu">Euskara</a>
@@ -104,31 +109,49 @@
                     </div>
                 </div>
             </div>
+            <c:choose>
+                <c:when test="${param[WebConstants.TAB] eq WebConstants.TAB_RANGES}">
+                    <c:set var="RANGES_TAB_ACTIVE" value="active" />
+                    <c:set var="RANGES_TAB_SHOW" value="show" />
+                </c:when>
+                <c:when test="${param[WebConstants.TAB] eq WebConstants.TAB_READINGS}">
+                    <c:set var="READINGS_TAB_ACTIVE" value="active" />
+                    <c:set var="READINGS_TAB_SHOW" value="show" />
+                </c:when>
+                <c:when test="${param[WebConstants.TAB] eq WebConstants.TAB_EVENTS}">
+                    <c:set var="EVENTS_TAB_ACTIVE" value="active" />
+                    <c:set var="EVENTS_TAB_SHOW" value="show" />
+                </c:when>
+                <c:otherwise>
+                    <c:set var="HOME_TAB_ACTIVE" value="active" />
+                    <c:set var="HOME_TAB_SHOW" value="show" />
+                </c:otherwise>
+            </c:choose>
             <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                    <button class="nav-link ${HOME_TAB_ACTIVE}" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
                         <spring:message code="details" />
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="ranges-tab" data-toggle="tab" data-target="#ranges" type="button" role="tab" aria-controls="ranges" aria-selected="false">
+                    <button class="nav-link ${RANGES_TAB_ACTIVE}" id="ranges-tab" data-toggle="tab" data-target="#ranges" type="button" role="tab" aria-controls="ranges" aria-selected="false">
                         <spring:message code="ranges" />
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="readings-tab" data-toggle="tab" data-target="#readings" type="button" role="tab" aria-controls="readings" aria-selected="false">
+                    <button class="nav-link ${READINGS_TAB_ACTIVE}" id="readings-tab" data-toggle="tab" data-target="#readings" type="button" role="tab" aria-controls="readings" aria-selected="false">
                         <spring:message code="readings" />
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="events-tab" data-toggle="tab" data-target="#events" type="button" role="tab" aria-controls="events" aria-selected="false">
+                    <button class="nav-link ${EVENTS_TAB_ACTIVE}" id="events-tab" data-toggle="tab" data-target="#events" type="button" role="tab" aria-controls="events" aria-selected="false">
                         <spring:message code="events" />
                     </button>
                 </li>
             </ul>
             <spring:message code="date.pattern" var="DATE_PATTERN" />
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade ${HOME_TAB_SHOW} ${HOME_TAB_ACTIVE}" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="form-row mt-3">
                         <div class="form-group col-md-12">
                             <label for="name"><spring:message code="name" /></label>
@@ -255,7 +278,7 @@
                         </c:if>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
+                <div class="tab-pane fade ${RANGES_TAB_SHOW} ${RANGES_TAB_ACTIVE}" id="ranges" role="tabpanel" aria-labelledby="ranges-tab">
                     <div class="row mt-3">
                         <div class="col-sm-8">
                             <h3><spring:message code="range.list" /></h3>
@@ -298,10 +321,10 @@
                         </div>
                     </c:if>
                 </div>
-                <div class="tab-pane fade" id="readings" role="tabpanel" aria-labelledby="readings-tab">
+                <div class="tab-pane fade ${READINGS_TAB_SHOW} ${READINGS_TAB_ACTIVE}" id="readings" role="tabpanel" aria-labelledby="readings-tab">
                     readings
                 </div>
-                <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
+                <div class="tab-pane fade ${EVENTS_TAB_SHOW} ${EVENTS_TAB_ACTIVE}" id="events" role="tabpanel" aria-labelledby="events-tab">
                     events
                 </div>
             </div>

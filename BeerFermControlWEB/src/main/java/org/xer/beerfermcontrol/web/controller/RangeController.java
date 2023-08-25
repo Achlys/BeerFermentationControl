@@ -68,14 +68,14 @@ public class RangeController {
         }
         beerFermControlFacade.addRange(range, ((User) model.asMap().get(WebConstants.USER)).getId());
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.range.added");
-        return "redirect:/config/" + configId;
+        return "redirect:/config/" + configId + "?" + WebConstants.TAB + "=" + WebConstants.TAB_RANGES;
     }
 
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.GET)
     public String remove(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         beerFermControlFacade.removeRange(id, configId, ((User) model.asMap().get(WebConstants.USER)).getId());
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.range.removed");
-        return "redirect:/config/" + configId;
+        return "redirect:/config/" + configId + "?" + WebConstants.TAB + "=" + WebConstants.TAB_RANGES;
     }
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
@@ -103,7 +103,7 @@ public class RangeController {
         }
         beerFermControlFacade.updateRange(range, ((User) model.asMap().get(WebConstants.USER)).getId());
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.range.updated");
-        return "redirect:/config/" + configId;
+        return "redirect:/config/" + configId + "?" + WebConstants.TAB + "=" + WebConstants.TAB_RANGES;
     }
 
 }
