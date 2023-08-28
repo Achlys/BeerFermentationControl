@@ -28,6 +28,7 @@ public class LoginHandlerFilter implements Filter {
         User userSession = (User) request.getSession().getAttribute(WebConstants.USER);
         if (!request.getRequestURI().startsWith(request.getContextPath() + "/login") && 
                 !request.getRequestURI().startsWith(request.getContextPath() + "/error") &&
+                !request.getRequestURI().startsWith(request.getContextPath() + "/newReading") &&
                 !request.getRequestURI().startsWith(request.getContextPath() + "/static") &&
                 (userSession == null || userSession.getId() == null)) {
             LOGGER.error("Ha intentado acceder al path: " + request.getRequestURI() + ", sin estar logeado!!!");

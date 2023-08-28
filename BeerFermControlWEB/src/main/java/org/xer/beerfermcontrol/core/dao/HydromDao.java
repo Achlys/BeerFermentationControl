@@ -1,5 +1,6 @@
 package org.xer.beerfermcontrol.core.dao;
 
+import java.util.List;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
 
 /**
@@ -17,5 +18,7 @@ public interface HydromDao {
     Hydrom getHydrom(Integer id, Integer configId);
 
     void updateHydrom(Hydrom hydrom);
+
+    List<Hydrom> getHydromsByName(String deviceName);
 
 }

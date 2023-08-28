@@ -82,6 +82,14 @@ public class ConfigDaoImpl implements ConfigDao {
     }
 
     @Override
+    public Config getConfig(Integer id) {
+        String sql = "SELECT * FROM CONFIG WHERE ID = :id";
+        Map parameters = new HashMap();
+        parameters.put("id", id);
+        return jdbc.queryForObject(sql, parameters, rowMapper);
+    }
+
+    @Override
     public Config getConfig(Integer id, Integer userId) {
         String sql = "SELECT * FROM CONFIG WHERE ID = :id AND USERS_ID = :userId";
         Map parameters = new HashMap();
@@ -100,7 +108,7 @@ public class ConfigDaoImpl implements ConfigDao {
         parameters.put("tolerance", config.getTolerance());
         parameters.put("startDate", config.getStartDate());
         parameters.put("endDate", config.getEndDate());
-        if(jdbc.update(sql, parameters) == 0){
+        if (jdbc.update(sql, parameters) == 0) {
             throw new RuntimeException("Ha intentado actualizar una config con ID que no coincidia con el user ID!!!");
         }
     }

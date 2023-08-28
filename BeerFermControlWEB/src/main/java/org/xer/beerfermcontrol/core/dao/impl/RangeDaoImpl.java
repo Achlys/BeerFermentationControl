@@ -129,4 +129,18 @@ public class RangeDaoImpl implements RangeDao {
         });
     }
 
+    @Override
+    public Range getApplicableRange(Integer configId, Double gravity) {
+        String sql = "SELECT * FROM TEMPRANGE WHERE CONFIG_ID = :configId AND TOP_GRAVITY >= :gravity AND BOTTOM_GRAVITY < :gravity";
+        Map parameters = new HashMap();
+        parameters.put("configId", configId);
+        parameters.put("gravity", gravity);
+        try {
+            return jdbc.queryForObject(sql, parameters, rowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            // The Range doesn't exist yet
+            return null;
+        }
+    }
+
 }

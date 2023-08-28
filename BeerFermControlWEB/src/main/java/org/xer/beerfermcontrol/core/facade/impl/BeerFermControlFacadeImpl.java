@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
 import org.xer.beerfermcontrol.core.bean.Range;
+import org.xer.beerfermcontrol.core.bean.Reading;
 import org.xer.beerfermcontrol.core.bean.Tplink;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.dao.ConfigDao;
 import org.xer.beerfermcontrol.core.dao.HydromDao;
 import org.xer.beerfermcontrol.core.dao.RangeDao;
+import org.xer.beerfermcontrol.core.dao.ReadingDao;
 import org.xer.beerfermcontrol.core.dao.TplinkDao;
 import org.xer.beerfermcontrol.core.dao.UserDao;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
@@ -37,6 +41,8 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     private HydromDao hydromDao;
     @Autowired
     private RangeDao rangeDao;
+    @Autowired
+    private ReadingDao readingDao;
     @Autowired
     private TplinkDao tplinkDao;
     @Autowired
@@ -257,6 +263,60 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
             }
         }
         return bArr;
+    }
+
+    @Override
+    public void newReading(String deviceName, Double temperature, Double stGravity, String json) {
+        // We log de reading on DB
+        Reading reading = new Reading();
+        reading.setMoment(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        reading.setHydromName(deviceName);
+        reading.setGravity(stGravity);
+        reading.setTemp(temperature);
+        reading.setJson(json);
+        readingDao.addReading(reading);
+        // Let's see if the Hydrom exists
+        List<Hydrom> hydroms = hydromDao.getHydromsByName(deviceName);
+        if (hydroms == null || hydroms.isEmpty()) {
+            // TODO: LOG the error
+
+        } else {
+            Date today = Calendar.getInstance().getTime();
+            for (Hydrom hydrom : hydroms) {
+                Config config = configDao.getConfig(hydrom.getConfigId());
+                if (!today.before(config.getStartDate()) && !today.after(config.getEndDate())) {
+                    Range range = rangeDao.getApplicableRange(hydrom.getConfigId(), stGravity);
+                    if (range == null) {
+                        // TODO: LOG the error
+
+                    } else {
+                        Tplink tpLinkWarm = tplinkDao.getTplinkByConfig(hydrom.getConfigId(), CoreConstants.TPLINK_TYPE_WARM);
+                        Tplink tpLinkCold = tplinkDao.getTplinkByConfig(hydrom.getConfigId(), CoreConstants.TPLINK_TYPE_COLD);
+                        if (temperature > range.getAimedTemp() + config.getTolerance()) {
+                            // We have to cool the worth
+                            if (tpLinkWarm != null) {
+                                this.sendMessage2Tplink(tpLinkWarm.getIp(), CoreConstants.TPLINK_OFF_MESSAGE);
+                            }
+                            if (tpLinkCold != null) {
+                                this.sendMessage2Tplink(tpLinkCold.getIp(), CoreConstants.TPLINK_ON_MESSAGE);
+                            }
+                            // TODO: LOG what we have done
+                        } else if (temperature < range.getAimedTemp() - config.getTolerance()) {
+                            // We have to heat the worth
+                            if (tpLinkWarm != null) {
+                                this.sendMessage2Tplink(tpLinkWarm.getIp(), CoreConstants.TPLINK_ON_MESSAGE);
+                            }
+                            if (tpLinkCold != null) {
+                                this.sendMessage2Tplink(tpLinkCold.getIp(), CoreConstants.TPLINK_OFF_MESSAGE);
+                            }
+                            // TODO: LOG what we have done
+                        } else {
+                            // TODO: Everithing is allright, LOG we do nothing
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -20,5 +20,7 @@ public interface RangeDao {
     void updateRange(Range range);
 
     boolean overlapsOtherRange(Range range, boolean exceptItself);
+
+    Range getApplicableRange(Integer configId, Double gravity);
     
 }

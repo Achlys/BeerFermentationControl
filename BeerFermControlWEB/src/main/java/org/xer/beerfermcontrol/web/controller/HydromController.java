@@ -76,5 +76,5 @@ public class HydromController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.hydrom.updated");
         return "redirect:/config/" + configId;
     }
-
+    
 }

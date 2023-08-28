@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -103,6 +104,12 @@ public class HydromDaoImpl implements HydromDao {
         if(jdbc.update(sql, parameters) == 0){
             throw new RuntimeException("Ha intentado actualizar una Hydrom con ID que no coincidia con el Config ID!!!");
         }
+    }
+
+    @Override
+    public List<Hydrom> getHydromsByName(String deviceName) {
+        String sql = "SELECT * FROM HYDROM WHERE NAME = :name";
+        return jdbc.query(sql, Collections.singletonMap("name", deviceName), rowMapper);
     }
 
 }

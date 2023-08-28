@@ -56,5 +56,7 @@ public interface BeerFermControlFacade {
     String encender(Integer id, Integer configId);
 
     String apagar(Integer id, Integer configId);
+
+    void newReading(String deviceName, Double temperature, Double stGravity, String json);
     
 }

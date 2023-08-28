@@ -1,6 +1,14 @@
 package org.xer.beerfermcontrol.web.controller;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.xer.beerfermcontrol.core.bean.User;
@@ -63,6 +74,21 @@ public class InitController {
     @RequestMapping(value = "/error", method = RequestMethod.GET)
     public String error(Model model) {
         return "error";
+    }
+
+    @RequestMapping(value = "/newReading/{deviceName}", method = RequestMethod.GET)
+    @ResponseBody
+    public String reading(@PathVariable("deviceName") String deviceName, @RequestParam("temp") Double temperature,
+            @RequestParam("sg") Double stGravity, HttpServletRequest request) throws FileUploadException, IOException {
+        if (ServletFileUpload.isMultipartContent(request)) {
+            ServletFileUpload upload = new ServletFileUpload();
+            List<FileItem> fileItems = upload.parseRequest(request);
+            String json = IOUtils.toString(fileItems.get(0).getInputStream(), StandardCharsets.UTF_8);
+            beerFermControlFacade.newReading(deviceName, temperature, stGravity, json);
+            return "ok";
+        } else {
+            return "ko";
+        }
     }
 
 }
