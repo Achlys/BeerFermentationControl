@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -225,8 +226,8 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
             clientSocket = new Socket(ip, CoreConstants.TPLINK_TCP_PORT);
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            out.println(message);
-            return in.readLine();
+            out.println(new String(this.cypher(message.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
+            return new String(this.cypher(in.readLine().getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
         } catch (IOException e) {
             return e.getMessage();
         } finally {
@@ -244,6 +245,18 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
 
             }
         }
+    }
+
+    public byte[] cypher(byte[] bArr) {
+        if (bArr != null && bArr.length > 0) {
+            int i = -85;
+            for (int i2 = 0; i2 < bArr.length; i2++) {
+                byte b = (byte) (i ^ bArr[i2]);
+                i = bArr[i2];
+                bArr[i2] = b;
+            }
+        }
+        return bArr;
     }
 
 }
