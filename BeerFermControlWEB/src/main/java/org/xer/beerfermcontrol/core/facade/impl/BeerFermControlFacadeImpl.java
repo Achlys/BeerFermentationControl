@@ -1,5 +1,11 @@
 package org.xer.beerfermcontrol.core.facade.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,17 +75,17 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     public void removeConfig(Integer id, Integer userId) {
         Config config = this.getFullConfig(id, userId);
         configDao.removeConfig(id, userId);
-        if(config.getHydrom() != null){
+        if (config.getHydrom() != null) {
             this.removeHydrom(config.getHydrom().getId(), id, userId);
         }
-        if(config.getTplinkCold() != null){
+        if (config.getTplinkCold() != null) {
             this.removeTplink(config.getTplinkCold().getId(), id, userId);
         }
-        if(config.getTplinkWarm()!= null){
+        if (config.getTplinkWarm() != null) {
             this.removeTplink(config.getTplinkWarm().getId(), id, userId);
         }
-        if(config.getRanges() != null){
-            for(Range range : config.getRanges()){
+        if (config.getRanges() != null) {
+            for (Range range : config.getRanges()) {
                 this.removeRange(range.getId(), id, userId);
             }
         }
@@ -202,15 +208,42 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     @Override
     public String encender(Integer id, Integer configId) {
         Tplink tplink = tplinkDao.getTplink(id, configId);
-        String operation = "{\"system\":{\"set_relay_state\":{\"state\":1}}}";
-        return "OK";
+        return this.sendMessage2Tplink(tplink.getIp(), CoreConstants.TPLINK_ON_MESSAGE);
     }
 
     @Override
     public String apagar(Integer id, Integer configId) {
         Tplink tplink = tplinkDao.getTplink(id, configId);
-        String operation = "{\"system\":{\"set_relay_state\":{\"state\":1}}}";
-        return "OK";
+        return this.sendMessage2Tplink(tplink.getIp(), CoreConstants.TPLINK_OFF_MESSAGE);
+    }
+
+    private String sendMessage2Tplink(String ip, String message) {
+        Socket clientSocket = null;
+        PrintWriter out = null;
+        BufferedReader in = null;
+        try {
+            clientSocket = new Socket(ip, CoreConstants.TPLINK_TCP_PORT);
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out.println(message);
+            return in.readLine();
+        } catch (IOException e) {
+            return e.getMessage();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+            try {
+                if (in != null) {
+                    in.close();
+                }
+                if (clientSocket != null) {
+                    clientSocket.close();
+                }
+            } catch (IOException e) {
+
+            }
+        }
     }
 
 }
