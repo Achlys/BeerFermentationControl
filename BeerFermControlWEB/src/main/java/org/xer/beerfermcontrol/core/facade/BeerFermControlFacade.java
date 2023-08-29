@@ -53,10 +53,10 @@ public interface BeerFermControlFacade {
 
     boolean overlapsOtherRange(Range range, boolean exceptItself);
 
-    String encender(Integer id, Integer configId);
+    String encender(Integer id, Integer configId) throws Exception;
 
-    String apagar(Integer id, Integer configId);
+    String apagar(Integer id, Integer configId) throws Exception;
 
-    void newReading(String deviceName, Double temperature, Double stGravity, String json);
+    void newReading(String deviceName, Double temperature, Double stGravity, String json) throws Exception;
     
 }

@@ -120,18 +120,23 @@
                 </div>
                 <div class="mt-3">
                     <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-4">
+                            <label path="typePlain"><spring:message code="type" /></label>
+                            <input type="text" id="typePlain" class="form-control-plaintext" readonly value="${TYPE_DESC}" />
+                        </div>
+                        <div class="form-group col-md-8">
                             <form:label path="name"><spring:message code="name" /></form:label>
                             <form:input path="name" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
                             <form:errors path="name" cssClass="invalid-feedback" />
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label path="typePlain"><spring:message code="type" /></label>
-                            <input type="text" id="typePlain" class="form-control-plaintext" readonly value="${TYPE_DESC}" />
+                        <div class="form-group col-md-6">
+                            <form:label path="uuid"><spring:message code="mac.address" /></form:label>
+                            <form:input path="uuid" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
+                            <form:errors path="uuid" cssClass="invalid-feedback" />
                         </div>
-                        <div class="form-group col-md-8">
+                        <div class="form-group col-md-6">
                             <form:label path="ip"><spring:message code="ip" /></form:label>
                             <form:input path="ip" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" placeholder="###.###.###.###" />
                             <form:errors path="ip" cssClass="invalid-feedback" />

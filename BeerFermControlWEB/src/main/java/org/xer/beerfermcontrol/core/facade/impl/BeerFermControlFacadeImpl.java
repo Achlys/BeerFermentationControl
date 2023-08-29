@@ -1,11 +1,5 @@
 package org.xer.beerfermcontrol.core.facade.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +21,7 @@ import org.xer.beerfermcontrol.core.dao.TplinkDao;
 import org.xer.beerfermcontrol.core.dao.UserDao;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
 import org.xer.beerfermcontrol.core.util.CoreConstants;
+import org.xer.beerfermcontrol.core.util.TPLinkControl;
 
 /**
  *
@@ -213,60 +208,21 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
-    public String encender(Integer id, Integer configId) {
+    public String encender(Integer id, Integer configId) throws Exception {
         Tplink tplink = tplinkDao.getTplink(id, configId);
-        return this.sendMessage2Tplink(tplink.getIp(), CoreConstants.TPLINK_ON_MESSAGE);
+        TPLinkControl tplinkControl = new TPLinkControl(tplink.getIp(), tplink.getUuid(), tplink.getEmail(), tplink.getPassword());
+        return tplinkControl.turnOn();
     }
 
     @Override
-    public String apagar(Integer id, Integer configId) {
+    public String apagar(Integer id, Integer configId) throws Exception {
         Tplink tplink = tplinkDao.getTplink(id, configId);
-        return this.sendMessage2Tplink(tplink.getIp(), CoreConstants.TPLINK_OFF_MESSAGE);
-    }
-
-    private String sendMessage2Tplink(String ip, String message) {
-        Socket clientSocket = null;
-        PrintWriter out = null;
-        BufferedReader in = null;
-        try {
-            clientSocket = new Socket(ip, CoreConstants.TPLINK_TCP_PORT);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            out.println(new String(this.cypher(message.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
-            return new String(this.cypher(in.readLine().getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            return e.getMessage();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-            try {
-                if (in != null) {
-                    in.close();
-                }
-                if (clientSocket != null) {
-                    clientSocket.close();
-                }
-            } catch (IOException e) {
-
-            }
-        }
-    }
-
-    public byte[] cypher(byte[] bArr) {
-        if (bArr != null && bArr.length > 0) {
-            int i = -85;
-            for (int i2 = 0; i2 < bArr.length; i2++) {
-                byte b = (byte) (i ^ bArr[i2]);
-                i = bArr[i2];
-                bArr[i2] = b;
-            }
-        }
-        return bArr;
+        TPLinkControl tplinkControl = new TPLinkControl(tplink.getIp(), tplink.getUuid(), tplink.getEmail(), tplink.getPassword());
+        return tplinkControl.turnOff();
     }
 
     @Override
-    public void newReading(String deviceName, Double temperature, Double stGravity, String json) {
+    public void newReading(String deviceName, Double temperature, Double stGravity, String json) throws Exception {
         // We log de reading on DB
         Reading reading = new Reading();
         reading.setMoment(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -295,19 +251,27 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
                         if (temperature > range.getAimedTemp() + config.getTolerance()) {
                             // We have to cool the worth
                             if (tpLinkWarm != null) {
-                                this.sendMessage2Tplink(tpLinkWarm.getIp(), CoreConstants.TPLINK_OFF_MESSAGE);
+                                TPLinkControl tplinkControl = new TPLinkControl(tpLinkWarm.getIp(),
+                                        tpLinkWarm.getUuid(), tpLinkWarm.getEmail(), tpLinkWarm.getPassword());
+                                tplinkControl.turnOff();
                             }
                             if (tpLinkCold != null) {
-                                this.sendMessage2Tplink(tpLinkCold.getIp(), CoreConstants.TPLINK_ON_MESSAGE);
+                                TPLinkControl tplinkControl = new TPLinkControl(tpLinkCold.getIp(),
+                                        tpLinkCold.getUuid(), tpLinkCold.getEmail(), tpLinkCold.getPassword());
+                                tplinkControl.turnOn();
                             }
                             // TODO: LOG what we have done
                         } else if (temperature < range.getAimedTemp() - config.getTolerance()) {
                             // We have to heat the worth
                             if (tpLinkWarm != null) {
-                                this.sendMessage2Tplink(tpLinkWarm.getIp(), CoreConstants.TPLINK_ON_MESSAGE);
+                                TPLinkControl tplinkControl = new TPLinkControl(tpLinkWarm.getIp(),
+                                        tpLinkWarm.getUuid(), tpLinkWarm.getEmail(), tpLinkWarm.getPassword());
+                                tplinkControl.turnOn();
                             }
                             if (tpLinkCold != null) {
-                                this.sendMessage2Tplink(tpLinkCold.getIp(), CoreConstants.TPLINK_OFF_MESSAGE);
+                                TPLinkControl tplinkControl = new TPLinkControl(tpLinkCold.getIp(),
+                                        tpLinkCold.getUuid(), tpLinkCold.getEmail(), tpLinkCold.getPassword());
+                                tplinkControl.turnOff();
                             }
                             // TODO: LOG what we have done
                         } else {

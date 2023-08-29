@@ -66,10 +66,16 @@ public class TPLinkControl {
 
     private void makeHandShake() throws Exception {
         Response response = this.makePost(String.format("http://%s/app", this.ip),
-                String.format("{\"method\": \"handshake\", \"params\": {\"key\": \"-----BEGIN PUBLIC KEY-----\\n%s-----END PUBLIC KEY-----\\n\"}, \"requestTimeMils\": 0}", publicKey),
+                String.format("{\"method\": \"handshake\", \"params\": {\"key\": \"-----BEGIN PUBLIC KEY-----\\n%s\\n-----END PUBLIC KEY-----\\n\", \"requestTimeMils\": 0}}", publicKey),
                 null);
+        LOGGER.error("makeHandShake() response: " + response.body().string());
+        for(String headerName : response.headers().names()){
+            LOGGER.error(headerName + ": " + response.header(headerName));
+        }
         this.tapoKey = new JSONObject(response.body().string()).getJSONObject("result").getString("key");
+        LOGGER.error("makeHandShake() key: " + this.tapoKey);
         this.tapoCookie = response.header("Set-Cookie").split(";")[0];
+        LOGGER.error("makeHandShake() cookie: " + this.tapoCookie);
         this.decodeTapoKey();
     }
 
@@ -149,9 +155,13 @@ public class TPLinkControl {
                 String.format("{\"method\": \"securePassthrough\", \"params\": {\"request\": \"%s\"}}",
                         this.mo38009b_enc(String.format(request, this.password, this.username))),
                 this.tapoCookie);
+        LOGGER.error("makeSecurePassthrough() response: " + response.body().string());
         String encryptedResponse = new JSONObject(response.body().string()).getJSONObject("result").getString("response");
+        LOGGER.error("makeSecurePassthrough() encryptedResponse: " + encryptedResponse);
         String decriptedResponse = this.mo38006a_dec(encryptedResponse);
+        LOGGER.error("makeSecurePassthrough() decriptedResponse: " + decriptedResponse);
         this.token = new JSONObject(decriptedResponse).getJSONObject("result").getString("token");
+        LOGGER.error("makeSecurePassthrough() token: " + this.token);
     }
 
     private String shaDigestUsername(String str) throws Exception {
@@ -175,6 +185,7 @@ public class TPLinkControl {
                 String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": True}, \"requestTimeMils\": 0, \"terminalUUID\": \"%s\"}",
                         this.uuid),
                 this.tapoCookie);
+        LOGGER.error("turnOn() response: " + response.body().string());
         return response.body().string();
     }
 
@@ -183,6 +194,7 @@ public class TPLinkControl {
                 String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": False}, \"requestTimeMils\": 0, \"terminalUUID\": \"%s\"}",
                         this.uuid),
                 this.tapoCookie);
+        LOGGER.error("turnOff() response: " + response.body().string());
         return response.body().string();
     }
 

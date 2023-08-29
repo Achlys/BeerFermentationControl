@@ -54,7 +54,7 @@ public class TPLinkController {
     }
 
     @RequestMapping(value = "/add/cold", method = RequestMethod.POST)
-    public String addCold(@PathVariable("configId") Integer configId, @Valid @ModelAttribute(WebConstants.TPLINK) Tplink tplink, BindingResult bindingResult, 
+    public String addCold(@PathVariable("configId") Integer configId, @Valid @ModelAttribute(WebConstants.TPLINK) Tplink tplink, BindingResult bindingResult,
             Model model, RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
             return "tplinkAddEdit";
@@ -65,9 +65,9 @@ public class TPLinkController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.tplink.added");
         return "redirect:/config/" + configId;
     }
-    
-        @RequestMapping(value = "/add/warm", method = RequestMethod.POST)
-    public String addWarm(@PathVariable("configId") Integer configId, @Valid @ModelAttribute(WebConstants.TPLINK) Tplink tplink, BindingResult bindingResult, 
+
+    @RequestMapping(value = "/add/warm", method = RequestMethod.POST)
+    public String addWarm(@PathVariable("configId") Integer configId, @Valid @ModelAttribute(WebConstants.TPLINK) Tplink tplink, BindingResult bindingResult,
             Model model, RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
             return "tplinkAddEdit";
@@ -88,13 +88,13 @@ public class TPLinkController {
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public String loadEdit(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id, Model model) {
-        model.addAttribute(WebConstants.TPLINK, beerFermControlFacade.getTplink(id, configId, 
+        model.addAttribute(WebConstants.TPLINK, beerFermControlFacade.getTplink(id, configId,
                 ((User) model.asMap().get(WebConstants.USER)).getId()));
         return "tplinkAddEdit";
     }
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
-    public String edit(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id, @Valid @ModelAttribute(WebConstants.TPLINK) Tplink tplink, 
+    public String edit(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id, @Valid @ModelAttribute(WebConstants.TPLINK) Tplink tplink,
             BindingResult bindingResult, Model model, RedirectAttributes ra) {
         if (bindingResult.hasErrors()) {
             return "tplinkAddEdit";
@@ -105,17 +105,17 @@ public class TPLinkController {
         ra.addFlashAttribute(WebConstants.SUCCES_KEY, "succes.tplink.updated");
         return "redirect:/config/" + configId;
     }
-    
+
     @RequestMapping(value = "/{id}/encender", method = RequestMethod.GET)
     @ResponseBody
-    public String encender(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id){
+    public String encender(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id) throws Exception {
         return beerFermControlFacade.encender(id, configId);
     }
 
     @RequestMapping(value = "/{id}/apagar", method = RequestMethod.GET)
     @ResponseBody
-    public String apagar(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id){
+    public String apagar(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id) throws Exception {
         return beerFermControlFacade.apagar(id, configId);
     }
-    
+
 }

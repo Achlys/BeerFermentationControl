@@ -1,12 +1,10 @@
 package org.xer.beerfermcontrol.web.controller;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -79,7 +77,7 @@ public class InitController {
     @RequestMapping(value = "/newReading/{deviceName}", method = RequestMethod.GET)
     @ResponseBody
     public String reading(@PathVariable("deviceName") String deviceName, @RequestParam("temp") Double temperature,
-            @RequestParam("sg") Double stGravity, HttpServletRequest request) throws FileUploadException, IOException {
+            @RequestParam("sg") Double stGravity, HttpServletRequest request) throws Exception {
         if (ServletFileUpload.isMultipartContent(request)) {
             ServletFileUpload upload = new ServletFileUpload();
             List<FileItem> fileItems = upload.parseRequest(request);
