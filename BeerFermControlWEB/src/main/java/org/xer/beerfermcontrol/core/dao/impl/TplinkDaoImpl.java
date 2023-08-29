@@ -33,6 +33,9 @@ public class TplinkDaoImpl implements TplinkDao {
             tplink.setName(rs.getString("NAME").trim());
             tplink.setType(rs.getString("TYPE"));
             tplink.setIp(rs.getString("IP"));
+            tplink.setUuid(rs.getString("UUID"));
+            tplink.setEmail(rs.getString("EMAIL"));
+            tplink.setPassword(rs.getString("PASSWORD"));
             return tplink;
         }
     };
@@ -64,13 +67,16 @@ public class TplinkDaoImpl implements TplinkDao {
                 }
             }
         });
-        sql = "INSERT INTO TPLINK (ID, CONFIG_ID, NAME, TYPE, IP) VALUES (:id, :configId, :name, :type, :ip)";
+        sql = "INSERT INTO TPLINK (ID, CONFIG_ID, NAME, TYPE, IP, UUID, EMAIL, PASSWORD) VALUES (:id, :configId, :name, :type, :ip, :uuid, :email, :password)";
         Map parameters = new HashMap();
         parameters.put("id", id);
         parameters.put("configId", tplink.getConfigId());
         parameters.put("name", tplink.getName());
         parameters.put("type", tplink.getType());
         parameters.put("ip", tplink.getIp());
+        parameters.put("uuid", tplink.getUuid());
+        parameters.put("email", tplink.getEmail());
+        parameters.put("password", tplink.getPassword());
         jdbc.update(sql, parameters);
     }
 
@@ -101,12 +107,15 @@ public class TplinkDaoImpl implements TplinkDao {
 
     @Override
     public void updateTplink(Tplink tplink) {
-        String sql = "UPDATE TPLINK SET NAME = :name, IP = :ip WHERE ID = :id AND CONFIG_ID = :configId";
+        String sql = "UPDATE TPLINK SET NAME = :name, IP = :ip, UUID = :uuid,  EMAIL = :email, PASSWORD = :password WHERE ID = :id AND CONFIG_ID = :configId";
         Map parameters = new HashMap();
         parameters.put("id", tplink.getId());
         parameters.put("configId", tplink.getConfigId());
         parameters.put("name", tplink.getName());
         parameters.put("ip", tplink.getIp());
+        parameters.put("uuid", tplink.getUuid());
+        parameters.put("email", tplink.getEmail());
+        parameters.put("password", tplink.getPassword());
         if(jdbc.update(sql, parameters) == 0){
             throw new RuntimeException("Ha intentado actualizar una TPLink con ID que no coincidia con el Config ID!!!");
         }

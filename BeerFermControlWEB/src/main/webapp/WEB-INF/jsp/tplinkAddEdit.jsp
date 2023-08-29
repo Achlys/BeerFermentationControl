@@ -137,6 +137,18 @@
                             <form:errors path="ip" cssClass="invalid-feedback" />
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <form:label path="email"><spring:message code="email" /></form:label>
+                            <form:input type="email" path="email" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
+                            <form:errors path="email" cssClass="invalid-feedback" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <form:label path="password"><spring:message code="password" /></form:label>
+                            <form:input type="password" path="password" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
+                            <form:errors path="password" cssClass="invalid-feedback" />
+                        </div>
+                    </div>
                 </div>
             </form:form>
         </main>
