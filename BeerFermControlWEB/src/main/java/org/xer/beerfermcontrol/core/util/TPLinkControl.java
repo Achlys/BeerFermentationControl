@@ -17,6 +17,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.Calendar;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -66,12 +67,9 @@ public class TPLinkControl {
 
     private void makeHandShake() throws Exception {
         Response response = this.makePost(String.format("http://%s/app", this.ip),
-                String.format("{\"method\": \"handshake\", \"params\": {\"key\": \"-----BEGIN PUBLIC KEY-----\\n%s\\n-----END PUBLIC KEY-----\\n\", \"requestTimeMils\": 0}}", publicKey),
+                String.format("{\"method\": \"handshake\", \"params\": {\"key\": \"-----BEGIN PUBLIC KEY-----\\n%s\\n-----END PUBLIC KEY-----\\n\", \"requestTimeMils\": %d}}",
+                        publicKey, Calendar.getInstance().getTimeInMillis()),
                 null);
-        LOGGER.error("makeHandShake() response: " + response.body().string());
-        for(String headerName : response.headers().names()){
-            LOGGER.error(headerName + ": " + response.header(headerName));
-        }
         this.tapoKey = new JSONObject(response.body().string()).getJSONObject("result").getString("key");
         LOGGER.error("makeHandShake() key: " + this.tapoKey);
         this.tapoCookie = response.header("Set-Cookie").split(";")[0];
@@ -81,14 +79,17 @@ public class TPLinkControl {
 
     private Response makePost(String url, String json, String cookie) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .addHeader("Cookie", cookie != null ? cookie : "")
-                .url(url)
-                .post(body)
-                .build();
+        Request.Builder builder = new Request.Builder();
+        if (cookie != null) {
+            builder.addHeader("Cookie", cookie);
+        }
+        builder.url(url)
+                .post(body);
+        Request request = builder.build();
         boolean executed = false;
         Response response = null;
-        while (!executed) {
+        int i = 0;
+        while (!executed && i++ < 10) {
             try {
                 response = okHttpClient.newCall(request).execute();
                 executed = true;
@@ -117,9 +118,9 @@ public class TPLinkControl {
     private void c658a(byte[] bArr, byte[] bArr2) throws Exception {
         SecretKeySpec secretKeySpec = new SecretKeySpec(bArr, "AES");
         IvParameterSpec ivParameterSpec = new IvParameterSpec(bArr2);
-        f21776a_enc = Cipher.getInstance("AES/CBC/PKCS7Padding");
+        f21776a_enc = Cipher.getInstance("AES/CBC/PKCS5Padding");
         f21776a_enc.init(1, secretKeySpec, ivParameterSpec);
-        f21777b_dec = Cipher.getInstance("AES/CBC/PKCS7Padding");
+        f21777b_dec = Cipher.getInstance("AES/CBC/PKCS5Padding");
         f21777b_dec.init(2, secretKeySpec, ivParameterSpec);
     }
 
@@ -155,7 +156,6 @@ public class TPLinkControl {
                 String.format("{\"method\": \"securePassthrough\", \"params\": {\"request\": \"%s\"}}",
                         this.mo38009b_enc(String.format(request, this.password, this.username))),
                 this.tapoCookie);
-        LOGGER.error("makeSecurePassthrough() response: " + response.body().string());
         String encryptedResponse = new JSONObject(response.body().string()).getJSONObject("result").getString("response");
         LOGGER.error("makeSecurePassthrough() encryptedResponse: " + encryptedResponse);
         String decriptedResponse = this.mo38006a_dec(encryptedResponse);
@@ -182,19 +182,17 @@ public class TPLinkControl {
 
     public String turnOn() throws Exception {
         Response response = this.makePost(String.format("http://%s/app?token=%s", this.ip, this.token),
-                String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": True}, \"requestTimeMils\": 0, \"terminalUUID\": \"%s\"}",
-                        this.uuid),
+                String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": True}, \"requestTimeMils\": %d, \"terminalUUID\": \"%s\"}",
+                        Calendar.getInstance().getTimeInMillis(), this.uuid),
                 this.tapoCookie);
-        LOGGER.error("turnOn() response: " + response.body().string());
         return response.body().string();
     }
 
     public String turnOff() throws Exception {
         Response response = this.makePost(String.format("http://%s/app?token=%s", this.ip, this.token),
-                String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": False}, \"requestTimeMils\": 0, \"terminalUUID\": \"%s\"}",
-                        this.uuid),
+                String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": False}, \"requestTimeMils\": %d, \"terminalUUID\": \"%s\"}",
+                        Calendar.getInstance().getTimeInMillis(), this.uuid),
                 this.tapoCookie);
-        LOGGER.error("turnOff() response: " + response.body().string());
         return response.body().string();
     }
 
