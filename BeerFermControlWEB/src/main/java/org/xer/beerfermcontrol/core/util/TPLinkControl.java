@@ -17,7 +17,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
-import java.util.Calendar;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -67,13 +66,11 @@ public class TPLinkControl {
 
     private void makeHandShake() throws Exception {
         Response response = this.makePost(String.format("http://%s/app", this.ip),
-                String.format("{\"method\": \"handshake\", \"params\": {\"key\": \"-----BEGIN PUBLIC KEY-----\\n%s\\n-----END PUBLIC KEY-----\\n\", \"requestTimeMils\": %d}}",
-                        publicKey, Calendar.getInstance().getTimeInMillis()),
+                String.format("{\"method\": \"handshake\", \"params\": {\"key\": \"-----BEGIN PUBLIC KEY-----\\n%s\\n-----END PUBLIC KEY-----\\n\", \"requestTimeMils\": 0}}",
+                        publicKey),
                 null);
         this.tapoKey = new JSONObject(response.body().string()).getJSONObject("result").getString("key");
-        LOGGER.error("makeHandShake() key: " + this.tapoKey);
         this.tapoCookie = response.header("Set-Cookie").split(";")[0];
-        LOGGER.error("makeHandShake() cookie: " + this.tapoCookie);
         this.decodeTapoKey();
     }
 
@@ -157,11 +154,8 @@ public class TPLinkControl {
                         this.mo38009b_enc(String.format(request, this.password, this.username))),
                 this.tapoCookie);
         String encryptedResponse = new JSONObject(response.body().string()).getJSONObject("result").getString("response");
-        LOGGER.error("makeSecurePassthrough() encryptedResponse: " + encryptedResponse);
         String decriptedResponse = this.mo38006a_dec(encryptedResponse);
-        LOGGER.error("makeSecurePassthrough() decriptedResponse: " + decriptedResponse);
         this.token = new JSONObject(decriptedResponse).getJSONObject("result").getString("token");
-        LOGGER.error("makeSecurePassthrough() token: " + this.token);
     }
 
     private String shaDigestUsername(String str) throws Exception {
@@ -181,19 +175,25 @@ public class TPLinkControl {
     }
 
     public String turnOn() throws Exception {
+        String request = String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": true}, \"requestTimeMils\": 0, \"terminalUUID\": \"%s\"}",
+                this.uuid);
         Response response = this.makePost(String.format("http://%s/app?token=%s", this.ip, this.token),
-                String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": True}, \"requestTimeMils\": %d, \"terminalUUID\": \"%s\"}",
-                        Calendar.getInstance().getTimeInMillis(), this.uuid),
+                String.format("{\"method\": \"securePassthrough\", \"params\": {\"request\": \"%s\"}}",
+                        this.mo38009b_enc(String.format(request, this.password, this.username))),
                 this.tapoCookie);
-        return response.body().string();
+        String encryptedResponse = new JSONObject(response.body().string()).getJSONObject("result").getString("response");
+        return this.mo38006a_dec(encryptedResponse);
     }
 
     public String turnOff() throws Exception {
+        String request = String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": false}, \"requestTimeMils\": 0, \"terminalUUID\": \"%s\"}",
+                this.uuid);
         Response response = this.makePost(String.format("http://%s/app?token=%s", this.ip, this.token),
-                String.format("{\"method\": \"set_device_info\", \"params\":{\"device_on\": False}, \"requestTimeMils\": %d, \"terminalUUID\": \"%s\"}",
-                        Calendar.getInstance().getTimeInMillis(), this.uuid),
+                String.format("{\"method\": \"securePassthrough\", \"params\": {\"request\": \"%s\"}}",
+                        this.mo38009b_enc(String.format(request, this.password, this.username))),
                 this.tapoCookie);
-        return response.body().string();
+        String encryptedResponse = new JSONObject(response.body().string()).getJSONObject("result").getString("response");
+        return this.mo38006a_dec(encryptedResponse);
     }
 
 }
