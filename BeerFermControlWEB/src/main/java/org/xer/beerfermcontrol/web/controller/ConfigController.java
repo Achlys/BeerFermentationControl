@@ -93,6 +93,10 @@ public class ConfigController {
     public String loadConfig(@PathVariable("id") Integer id, Model model, @ModelAttribute(WebConstants.SUCCES_KEY) String succes) {
         Config config = beerFermControlFacade.getFullConfig(id, ((User) model.asMap().get(WebConstants.USER)).getId());
         model.addAttribute(WebConstants.CONFIG, config);
+        model.addAttribute(WebConstants.EVENT_LIST, 
+                beerFermControlFacade.getEventList(id, ((User) model.asMap().get(WebConstants.USER)).getId()));
+        model.addAttribute(WebConstants.READING_LIST, 
+                beerFermControlFacade.getReadingList(id, ((User) model.asMap().get(WebConstants.USER)).getId()));
         if (succes != null) {
             model.addAttribute(WebConstants.SUCCES_KEY, succes);
         }

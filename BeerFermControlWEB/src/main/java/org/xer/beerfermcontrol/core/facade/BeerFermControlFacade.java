@@ -4,7 +4,9 @@ import java.util.List;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
 import org.xer.beerfermcontrol.core.bean.Range;
+import org.xer.beerfermcontrol.core.bean.Reading;
 import org.xer.beerfermcontrol.core.bean.Tplink;
+import org.xer.beerfermcontrol.core.bean.Ulog;
 import org.xer.beerfermcontrol.core.bean.User;
 
 /**
@@ -53,10 +55,10 @@ public interface BeerFermControlFacade {
 
     boolean overlapsOtherRange(Range range, boolean exceptItself);
 
-    String encender(Integer id, Integer configId) throws Exception;
-
-    String apagar(Integer id, Integer configId) throws Exception;
-
     void newReading(String deviceName, Double temperature, Double stGravity, String json) throws Exception;
+
+    List<Ulog> getEventList(Integer configId, Integer userId);
+
+    List<Reading> getReadingList(Integer configId, Integer userId);
     
 }

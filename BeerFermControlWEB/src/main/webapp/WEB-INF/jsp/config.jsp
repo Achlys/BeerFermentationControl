@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <spring:url value="/static" var="URL_STATIC" />
         <link rel="stylesheet" href="${URL_STATIC}/css/jquery-ui.min.css">
+        <link rel="stylesheet" href="${URL_STATIC}/css/datatables.min.css">
         <link rel="stylesheet" href="${URL_STATIC}/css/beer_ferm_control.css">
         <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
         <script src="https://kit.fontawesome.com/23c13a6a20.js" crossorigin="anonymous"></script>
@@ -298,7 +299,7 @@
                     <c:if test="${not empty requestScope[WebConstants.CONFIG].ranges}">
                         <div class="mt-3">
                             <spring:message code="ask.remove.range" var="REMOVE_RANGE_MESSAGE" />
-                            <table id="configList" class="table table-striped table-bordered w-100">
+                            <table id="rangeList" class="table table-striped table-bordered w-100">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th><spring:message code="top.gravity" /></th>
@@ -325,10 +326,73 @@
                     </c:if>
                 </div>
                 <div class="tab-pane fade ${READINGS_TAB_SHOW} ${READINGS_TAB_ACTIVE}" id="readings" role="tabpanel" aria-labelledby="readings-tab">
-                    readings
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <h3><spring:message code="reading.list" /></h3>
+                        </div>
+                    </div>
+                    <c:if test="${empty requestScope[WebConstants.READING_LIST]}">
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <spring:message code="empty.list" />
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty requestScope[WebConstants.READING_LIST]}">
+                        <div class="mt-3">
+                            <table id="readingList" class="table table-striped table-bordered w-100">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th><spring:message code="moment" /></th>
+                                        <th><spring:message code="gravity" /></th>
+                                        <th><spring:message code="temperature" /></th>
+                                        <th><spring:message code="temperature" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <spring:message code="timestamp.pattern" var="TIMESTAMP_PATTERN" />
+                                    <c:forEach items="${requestScope[WebConstants.READING_LIST]}" var="reading">
+                                        <tr>
+                                            <td><fmt:formatDate pattern="${TIMESTAMP_PATTERN}" value="${reading.moment}" /></td>
+                                            <td><fmt:formatNumber pattern="0.000" value="${reading.gravity}" /></td>
+                                            <td><fmt:formatNumber pattern="0.#" value="${reading.temp}" /></td>
+                                            <td><c:out value="${reading.json}" /></td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </c:if>
                 </div>
                 <div class="tab-pane fade ${EVENTS_TAB_SHOW} ${EVENTS_TAB_ACTIVE}" id="events" role="tabpanel" aria-labelledby="events-tab">
-                    events
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <h3><spring:message code="event.list" /></h3>
+                        </div>
+                    </div>
+                    <c:if test="${empty requestScope[WebConstants.EVENT_LIST]}">
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <spring:message code="empty.list" />
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty requestScope[WebConstants.EVENT_LIST]}">
+                        <div class="mt-3">
+                            <table id="eventList" class="table table-striped table-bordered w-100">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th><spring:message code="moment" /></th>
+                                        <th><spring:message code="event" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${requestScope[WebConstants.EVENT_LIST]}" var="log">
+                                        <tr>
+                                            <td><fmt:formatDate pattern="${TIMESTAMP_PATTERN}" value="${log.moment}" /></td>
+                                            <td><c:out value="${log.event}" /></td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </c:if>
                 </div>
             </div>
         </div>
@@ -355,9 +419,17 @@
     </main>
     <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
     <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
+    <script src="${URL_STATIC}/js/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
     <script>
+        <spring:message code="datatable.language.url" var="DATATABLE_LANG_URL" />
+        $(function () {
+            new DataTable('#rangeList', {language: {url: '${DATATABLE_LANG_URL}'}});
+            new DataTable('#readingList', {language: {url: '${DATATABLE_LANG_URL}'}});
+            new DataTable('#eventList', {language: {url: '${DATATABLE_LANG_URL}'}});
+        });
+
         function fncShowModal(url, message) {
             $("#removeModalMessage").html(message);
             $("#removeModalButton").attr('href', url);

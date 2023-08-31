@@ -111,16 +111,4 @@ public class TPLinkController {
         return "redirect:/config/" + configId;
     }
 
-    @RequestMapping(value = "/{id}/encender", method = RequestMethod.GET)
-    @ResponseBody
-    public String encender(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id) throws Exception {
-        return beerFermControlFacade.encender(id, configId);
-    }
-
-    @RequestMapping(value = "/{id}/apagar", method = RequestMethod.GET)
-    @ResponseBody
-    public String apagar(@PathVariable("configId") Integer configId, @PathVariable("id") Integer id) throws Exception {
-        return beerFermControlFacade.apagar(id, configId);
-    }
-
 }

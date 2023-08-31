@@ -12,12 +12,14 @@ import org.xer.beerfermcontrol.core.bean.Hydrom;
 import org.xer.beerfermcontrol.core.bean.Range;
 import org.xer.beerfermcontrol.core.bean.Reading;
 import org.xer.beerfermcontrol.core.bean.Tplink;
+import org.xer.beerfermcontrol.core.bean.Ulog;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.dao.ConfigDao;
 import org.xer.beerfermcontrol.core.dao.HydromDao;
 import org.xer.beerfermcontrol.core.dao.RangeDao;
 import org.xer.beerfermcontrol.core.dao.ReadingDao;
 import org.xer.beerfermcontrol.core.dao.TplinkDao;
+import org.xer.beerfermcontrol.core.dao.UlogDao;
 import org.xer.beerfermcontrol.core.dao.UserDao;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
 import org.xer.beerfermcontrol.core.util.CoreConstants;
@@ -40,6 +42,8 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     private ReadingDao readingDao;
     @Autowired
     private TplinkDao tplinkDao;
+    @Autowired
+    private UlogDao ulogDao;
     @Autowired
     private UserDao userDao;
 
@@ -208,20 +212,6 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
-    public String encender(Integer id, Integer configId) throws Exception {
-        Tplink tplink = tplinkDao.getTplink(id, configId);
-        TPLinkControl tplinkControl = new TPLinkControl(tplink.getIp(), tplink.getUuid(), tplink.getEmail(), tplink.getPassword());
-        return tplinkControl.turnOn();
-    }
-
-    @Override
-    public String apagar(Integer id, Integer configId) throws Exception {
-        Tplink tplink = tplinkDao.getTplink(id, configId);
-        TPLinkControl tplinkControl = new TPLinkControl(tplink.getIp(), tplink.getUuid(), tplink.getEmail(), tplink.getPassword());
-        return tplinkControl.turnOff();
-    }
-
-    @Override
     public void newReading(String deviceName, Double temperature, Double stGravity, String json) throws Exception {
         // We log de reading on DB
         Reading reading = new Reading();
@@ -280,6 +270,23 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public List<Ulog> getEventList(Integer configId, Integer userId) {
+        this.checkConfigForUser(configId, userId);
+        return ulogDao.getEventList(configId);
+    }
+
+    @Override
+    public List<Reading> getReadingList(Integer configId, Integer userId) {
+        this.checkConfigForUser(configId, userId);
+        Hydrom hydrom = hydromDao.getHydromByConfig(configId);
+        if (hydrom != null) {
+            return readingDao.getReadingList(hydrom.getName());
+        } else {
+            return null;
         }
     }
 

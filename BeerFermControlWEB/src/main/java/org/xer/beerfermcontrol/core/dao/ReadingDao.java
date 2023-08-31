@@ -1,5 +1,6 @@
 package org.xer.beerfermcontrol.core.dao;
 
+import java.util.List;
 import org.xer.beerfermcontrol.core.bean.Reading;
 
 /**
@@ -8,8 +9,8 @@ import org.xer.beerfermcontrol.core.bean.Reading;
  */
 public interface ReadingDao {
 
-    public void addReading(Reading reading);
-    
+    void addReading(Reading reading);
 
-    
+    List<Reading> getReadingList(String hydromName);
+
 }
