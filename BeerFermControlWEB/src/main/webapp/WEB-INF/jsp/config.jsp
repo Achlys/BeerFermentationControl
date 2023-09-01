@@ -12,7 +12,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <spring:url value="/static" var="URL_STATIC" />
         <link rel="stylesheet" href="${URL_STATIC}/css/jquery-ui.min.css">
-        <link rel="stylesheet" href="${URL_STATIC}/css/datatables.min.css">
+        <link rel="stylesheet" href="${URL_STATIC}/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="${URL_STATIC}/css/responsive.bootstrap4.min.css">
         <link rel="stylesheet" href="${URL_STATIC}/css/beer_ferm_control.css">
         <link rel="icon" href="${URL_STATIC}/images/beer-icon.png">
         <script src="https://kit.fontawesome.com/23c13a6a20.js" crossorigin="anonymous"></script>
@@ -299,7 +300,7 @@
                     <c:if test="${not empty requestScope[WebConstants.CONFIG].ranges}">
                         <div class="mt-3">
                             <spring:message code="ask.remove.range" var="REMOVE_RANGE_MESSAGE" />
-                            <table id="rangeList" class="table table-striped table-bordered w-100">
+                            <table id="rangeList" class="table table-striped table-bordered nowrap" style="width: 100%;">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th><spring:message code="top.gravity" /></th>
@@ -338,7 +339,7 @@
                     </c:if>
                     <c:if test="${not empty requestScope[WebConstants.READING_LIST]}">
                         <div class="mt-3">
-                            <table id="readingList" class="table table-striped table-bordered w-100">
+                            <table id="readingList" class="table table-striped table-bordered w-100 nowrap">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th><spring:message code="moment" /></th>
@@ -375,7 +376,7 @@
                     </c:if>
                     <c:if test="${not empty requestScope[WebConstants.EVENT_LIST]}">
                         <div class="mt-3">
-                            <table id="eventList" class="table table-striped table-bordered w-100">
+                            <table id="eventList" class="table table-striped table-bordered w-100 nowrap">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th><spring:message code="moment" /></th>
@@ -419,15 +420,42 @@
     </main>
     <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
     <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
-    <script src="${URL_STATIC}/js/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <script src="${URL_STATIC}/js/jquery.dataTables.min.js"></script>
+    <script src="${URL_STATIC}/js/dataTables.bootstrap4.min.js"></script>
+    <script src="${URL_STATIC}/js/dataTables.responsive.min.js"></script>
+    <script src="${URL_STATIC}/js/responsive.bootstrap4.min.js"></script>
     <script>
         <spring:message code="datatable.language.url" var="DATATABLE_LANG_URL" />
+        var rangeTable;
+        var readingTable;
+        var eventTable;
         $(function () {
-            new DataTable('#rangeList', {language: {url: '${DATATABLE_LANG_URL}'}});
-            new DataTable('#readingList', {language: {url: '${DATATABLE_LANG_URL}'}});
-            new DataTable('#eventList', {language: {url: '${DATATABLE_LANG_URL}'}});
+            rangeTable = new DataTable('#rangeList', {
+                language: {url: '${DATATABLE_LANG_URL}'},
+                responsive: true,
+                columnDefs: [
+                    {responsivePriority: 1, targets: 0},
+                    {responsivePriority: 2, targets: 3}
+                ]
+            });
+            readingTable = new DataTable('#readingList', {
+                language: {url: '${DATATABLE_LANG_URL}'},
+                responsive: true
+            });
+            eventTable = new DataTable('#eventList', {
+                language: {url: '${DATATABLE_LANG_URL}'},
+                responsive: true
+            });
+
+            $('#myTab button').on('click', function (event) {
+                setTimeout(function(){
+                    rangeTable.columns.adjust().draw();
+                    readingTable.columns.adjust().draw();
+                    eventTable.columns.adjust().draw();
+                }, 100);
+            });
         });
 
         function fncShowModal(url, message) {
