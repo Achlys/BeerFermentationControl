@@ -249,7 +249,7 @@
                             </div>
                         </c:if>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row mb-3">
                         <c:if test="${empty requestScope[WebConstants.CONFIG].tplinkWarm}">
                             <c:set value="-" var="TPLINC_WARM_NAME" />
                             <c:set value="10" var="TPLINC_WARM_NAME_WIDTH" />
@@ -299,7 +299,7 @@
                         </div>
                     </c:if>
                     <c:if test="${not empty requestScope[WebConstants.CONFIG].ranges}">
-                        <div class="mt-3">
+                        <div class="mt-3 mb-3">
                             <spring:message code="ask.remove.range" var="REMOVE_RANGE_MESSAGE" />
                             <table id="rangeList" class="table table-striped table-bordered nowrap" style="width: 100%;">
                                 <thead class="thead-dark">
@@ -339,14 +339,14 @@
                         </div>
                     </c:if>
                     <c:if test="${not empty requestScope[WebConstants.READING_LIST]}">
-                        <div class="mt-3">
+                        <div class="mt-3 mb-3">
                             <table id="readingList" class="table table-striped table-bordered w-100 nowrap">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th><spring:message code="moment" /></th>
                                         <th><spring:message code="gravity" /></th>
                                         <th><spring:message code="temperature" /></th>
-                                        <th><spring:message code="temperature" /></th>
+                                        <th><spring:message code="json" /></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -375,7 +375,7 @@
                         </div>
                     </c:if>
                     <c:if test="${not empty requestScope[WebConstants.EVENT_LIST]}">
-                        <div class="mt-3">
+                        <div class="mt-3 mb-3">
                             <table id="eventList" class="table table-striped table-bordered w-100">
                                 <thead class="thead-dark">
                                     <tr>
@@ -442,11 +442,13 @@
             });
             readingTable = new DataTable('#readingList', {
                 language: {url: '${DATATABLE_LANG_URL}'},
-                responsive: true
+                responsive: true,
+                "order": [[ 0, 'desc' ]]
             });
             eventTable = new DataTable('#eventList', {
                 language: {url: '${DATATABLE_LANG_URL}'},
-                responsive: true
+                responsive: true,
+                "order": [[ 0, 'desc' ]]
             });
 
             $('#myTab button').on('click', function (event) {

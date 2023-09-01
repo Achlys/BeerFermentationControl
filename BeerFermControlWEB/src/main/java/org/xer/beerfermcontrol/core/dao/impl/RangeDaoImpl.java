@@ -109,8 +109,9 @@ public class RangeDaoImpl implements RangeDao {
 
     @Override
     public boolean overlapsOtherRange(Range range, boolean exceptItself) {
-        String sql = "SELECT * FROM TEMPRANGE WHERE ((TOP_GRAVITY >= :topGravity AND BOTTOM_GRAVITY < :topGravity) OR (TOP_GRAVITY > :bottomGravity AND BOTTOM_GRAVITY <= :bottomGravity))";
+        String sql = "SELECT * FROM TEMPRANGE WHERE CONFIG_ID = :configId AND ((TOP_GRAVITY >= :topGravity AND BOTTOM_GRAVITY < :topGravity) OR (TOP_GRAVITY > :bottomGravity AND BOTTOM_GRAVITY <= :bottomGravity))";
         Map parameters = new HashMap();
+        parameters.put("configId", range.getConfigId());
         parameters.put("topGravity", range.getTopGravity());
         parameters.put("bottomGravity", range.getBottomGravity());
         if(exceptItself){

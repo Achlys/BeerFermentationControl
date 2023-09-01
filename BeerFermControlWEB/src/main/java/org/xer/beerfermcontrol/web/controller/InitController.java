@@ -74,19 +74,13 @@ public class InitController {
         return "error";
     }
 
-    @RequestMapping(value = "/newReading/{deviceName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/newReading/{deviceName}", method = RequestMethod.POST)
     @ResponseBody
     public String reading(@PathVariable("deviceName") String deviceName, @RequestParam("temp") Double temperature,
             @RequestParam("sg") Double stGravity, HttpServletRequest request) throws Exception {
-        if (ServletFileUpload.isMultipartContent(request)) {
-            ServletFileUpload upload = new ServletFileUpload();
-            List<FileItem> fileItems = upload.parseRequest(request);
-            String json = IOUtils.toString(fileItems.get(0).getInputStream(), StandardCharsets.UTF_8);
-            beerFermControlFacade.newReading(deviceName, temperature, stGravity, json);
-            return "ok";
-        } else {
-            return "ko";
-        }
+        String json = "{\"device\": \"" + deviceName + "\", \"temp\": " + temperature + ", \"sg\": " + stGravity + "}";
+        beerFermControlFacade.newReading(deviceName, temperature, stGravity, json);
+        return "ok";
     }
 
 }
