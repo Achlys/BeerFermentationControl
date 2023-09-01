@@ -152,6 +152,7 @@
                 </li>
             </ul>
             <spring:message code="date.pattern" var="DATE_PATTERN" />
+            <spring:message code="timestamp.pattern" var="TIMESTAMP_PATTERN" />
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade ${HOME_TAB_SHOW} ${HOME_TAB_ACTIVE}" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="form-row mt-3">
@@ -349,7 +350,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <spring:message code="timestamp.pattern" var="TIMESTAMP_PATTERN" />
                                     <c:forEach items="${requestScope[WebConstants.READING_LIST]}" var="reading">
                                         <tr>
                                             <td><fmt:formatDate pattern="${TIMESTAMP_PATTERN}" value="${reading.moment}" /></td>
@@ -376,7 +376,7 @@
                     </c:if>
                     <c:if test="${not empty requestScope[WebConstants.EVENT_LIST]}">
                         <div class="mt-3">
-                            <table id="eventList" class="table table-striped table-bordered w-100 nowrap">
+                            <table id="eventList" class="table table-striped table-bordered w-100">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th><spring:message code="moment" /></th>
@@ -386,7 +386,7 @@
                                 <tbody>
                                     <c:forEach items="${requestScope[WebConstants.EVENT_LIST]}" var="log">
                                         <tr>
-                                            <td><fmt:formatDate pattern="${TIMESTAMP_PATTERN}" value="${log.moment}" /></td>
+                                            <td class="text-nowrap"><fmt:formatDate pattern="${TIMESTAMP_PATTERN}" value="${log.moment}" /></td>
                                             <td><c:out value="${log.event}" /></td>
                                         </tr>
                                     </c:forEach>

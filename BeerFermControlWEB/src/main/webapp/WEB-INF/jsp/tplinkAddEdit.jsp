@@ -133,7 +133,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <form:label path="uuid"><spring:message code="mac.address" /></form:label>
-                            <form:input path="uuid" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" />
+                            <form:input path="uuid" cssClass="form-control" cssErrorClass="form-control is-invalid" required="required" placeholder="XX-XX-XX-XX-XX" />
                             <form:errors path="uuid" cssClass="invalid-feedback" />
                         </div>
                         <div class="form-group col-md-6">
