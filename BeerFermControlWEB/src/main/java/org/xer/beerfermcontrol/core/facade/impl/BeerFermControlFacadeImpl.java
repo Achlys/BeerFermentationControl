@@ -297,11 +297,11 @@ public class BeerFermControlFacadeImpl implements BeerFermControlFacade {
     }
 
     @Override
-    public List<Reading> getReadingList(Integer configId, Integer userId) {
+    public List<Reading> getReadingList(Integer configId, Integer userId, Date startDate) {
         this.checkConfigForUser(configId, userId);
         Hydrom hydrom = hydromDao.getHydromByConfig(configId);
         if (hydrom != null) {
-            return readingDao.getReadingList(hydrom.getName());
+            return readingDao.getReadingList(hydrom.getName(), startDate);
         } else {
             return null;
         }

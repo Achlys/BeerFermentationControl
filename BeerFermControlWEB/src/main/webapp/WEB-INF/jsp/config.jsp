@@ -146,6 +146,11 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
+                    <button class="nav-link ${CHART_TAB_ACTIVE}" id="chart-tab" data-toggle="tab" data-target="#chart" type="button" role="tab" aria-controls="chart" aria-selected="false">
+                        <spring:message code="chart" />
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
                     <button class="nav-link ${EVENTS_TAB_ACTIVE}" id="events-tab" data-toggle="tab" data-target="#events" type="button" role="tab" aria-controls="events" aria-selected="false">
                         <spring:message code="events" />
                     </button>
@@ -363,6 +368,34 @@
                         </div>
                     </c:if>
                 </div>
+                <div class="tab-pane fade ${CHART_TAB_SHOW} ${CHART_TAB_ACTIVE}" id="chart" role="tabpanel" aria-labelledby="chart-tab">
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <h3><spring:message code="chart" /></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <spring:message code="date.input.pattern" var="dateInputPattern" />
+                        <div class="form-group col-md-4">
+                            <label for="chartDate"><spring:message code="start.date" /></label>
+                            <div class="input-group">
+                                <input type="text" id="chartDate" class="form-control datepicker" pattern="${dateInputPattern}" />
+                                <span class="input-group-append bg-white border-left-0">
+                                    <span class="input-group-text bg-transparent">
+                                        <i class="fa-regular fa-calendar"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>&nbsp;</label>
+                            <a href="javascript:fncRedraw();" class="btn btn-primary btn-block"><i class="fa-solid fa-chart-line"></i> <spring:message code="redraw" /></a>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
                 <div class="tab-pane fade ${EVENTS_TAB_SHOW} ${EVENTS_TAB_ACTIVE}" id="events" role="tabpanel" aria-labelledby="events-tab">
                     <div class="row mt-3">
                         <div class="col-sm-12">
@@ -420,18 +453,28 @@
     </main>
     <script src="${URL_STATIC}/js/jquery-3.7.0.min.js"></script>
     <script src="${URL_STATIC}/js/jquery-ui.min.js"></script>
+    <c:if test="${language eq 'es'}">
+        <script src="${URL_STATIC}/js/datepicker-es.js"></script>
+    </c:if>
+    <c:if test="${language eq 'eu'}">
+        <script src="${URL_STATIC}/js/datepicker-eu.js"></script>
+    </c:if>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
     <script src="${URL_STATIC}/js/jquery.dataTables.min.js"></script>
     <script src="${URL_STATIC}/js/dataTables.bootstrap4.min.js"></script>
     <script src="${URL_STATIC}/js/dataTables.responsive.min.js"></script>
     <script src="${URL_STATIC}/js/responsive.bootstrap4.min.js"></script>
+    <script src="${URL_STATIC}/js/chart.js"></script>
     <script>
         <spring:message code="datatable.language.url" var="DATATABLE_LANG_URL" />
         var rangeTable;
         var readingTable;
         var eventTable;
+        var canvas = $('#myChart')[0];
+        var chart;
         $(function () {
+            $(".datepicker").datepicker();
             rangeTable = new DataTable('#rangeList', {
                 language: {url: '${DATATABLE_LANG_URL}'},
                 responsive: true,
@@ -443,27 +486,93 @@
             readingTable = new DataTable('#readingList', {
                 language: {url: '${DATATABLE_LANG_URL}'},
                 responsive: true,
-                "order": [[ 0, 'desc' ]]
+                "order": [[0, 'desc']]
             });
             eventTable = new DataTable('#eventList', {
                 language: {url: '${DATATABLE_LANG_URL}'},
                 responsive: true,
-                "order": [[ 0, 'desc' ]]
+                "order": [[0, 'desc']]
             });
 
             $('#myTab button').on('click', function (event) {
-                setTimeout(function(){
+                setTimeout(function () {
                     rangeTable.columns.adjust().draw();
                     readingTable.columns.adjust().draw();
                     eventTable.columns.adjust().draw();
                 }, 100);
             });
+
         });
 
         function fncShowModal(url, message) {
             $("#removeModalMessage").html(message);
             $("#removeModalButton").attr('href', url);
             $("#removeModal").modal('show');
+        }
+
+        function fncRedraw() {
+            if(chart != undefined && chart != null){
+                chart.destroy()
+            }
+            $.ajax({
+                url: '<spring:url value="/config/${requestScope[WebConstants.CONFIG].id}/chart" />',
+                type: 'get',
+                dataType: 'json',
+                data: {chartDate: $("#chartDate").val()}
+            }).done(function (data) {
+                chart = new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: '<spring:message code="temperature" />',
+                                data: data.temperatures,
+                                borderColor: 'rgb(255, 0, 0)',
+                                backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                                pointStyle: false,
+                                yAxisID: 'y',
+                            },
+                            {
+                                label: '<spring:message code="gravity" />',
+                                data: data.gravities,
+                                borderColor: 'rgb(0, 0, 255)',
+                                backgroundColor: 'rgba(0, 0, 255, 0.5)',
+                                pointStyle: false,
+                                yAxisID: 'y1',
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        stacked: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '<spring:message code="chart.title" />'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                            },
+                        }
+                    }
+                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("fail:" + errorThrown);
+            });
         }
     </script>
 </body>

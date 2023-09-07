@@ -3,6 +3,7 @@ package org.xer.beerfermcontrol.core.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +50,15 @@ public class ReadingDaoImpl implements ReadingDao {
     }
 
     @Override
-    public List<Reading> getReadingList(String hydromName) {
-        String sql = "SELECT * FROM READING WHERE HYDROM_NAME = :name ORDER BY MOMENT DESC";
-        return jdbc.query(sql, Collections.singletonMap("name", hydromName), rowMapper);
+    public List<Reading> getReadingList(String hydromName, Date startDate) {
+        String sql = "SELECT * FROM READING WHERE HYDROM_NAME = :name";
+        Map parameters = new HashMap();
+        parameters.put("name", hydromName);
+        if(startDate != null){
+            sql += " AND MOMENT >= :date ORDER BY MOMENT ASC";
+            parameters.put("date", startDate);
+        }
+        return jdbc.query(sql, parameters, rowMapper);
     }
 
 }

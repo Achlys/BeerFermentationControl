@@ -1,5 +1,6 @@
 package org.xer.beerfermcontrol.core.facade;
 
+import java.util.Date;
 import java.util.List;
 import org.xer.beerfermcontrol.core.bean.Config;
 import org.xer.beerfermcontrol.core.bean.Hydrom;
@@ -59,6 +60,6 @@ public interface BeerFermControlFacade {
 
     List<Ulog> getEventList(Integer configId, Integer userId);
 
-    List<Reading> getReadingList(Integer configId, Integer userId);
+    List<Reading> getReadingList(Integer configId, Integer userId, Date startDate);
     
 }
