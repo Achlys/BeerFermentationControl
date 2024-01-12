@@ -1,0 +1,52 @@
+// Settear IP, usuario y password
+// Inicializar PyP100._initialize
+// Inicializar auth_protocol.__init__
+// Crear session HTTP
+local_seed = 16 bytes random
+Hacemos un POST a http://{ip_del_enchufe}/app/handshake1 pasando como parametro:
+data=local_seeds, timeout=2, params='None'
+Respuesta = 48 bytes:
+"Content" = b'\xa2\x98\xbc\xb7=\xeb<\xb7\xce$<\xb7\x81]<\xb72;(cL4y\xe6\x1c[\xc9=\xb8\xed\xd4!P\xd6\x84\xb7\x16A\x0e:\xd34\x13\\\xbeO\xac\xf2'
+remote_seed = respuesta[0:16]
+server_hash = respuesta[16:48]
+ah = sha256(sha1("xerraxete@gmail.com") + sha1("ironSink45"))  (digest)
+local_seed_auth_hash = sha256(local_seed + remote_seed + ah)
+if local_seed_auth_hash == server_hash -> Fuck yeah!! Todo controlado
+else -> throw new exception
+auth_hash = ah
+
+
+Hacemos un POST a http://{ip_del_enchufe}/app/handshake2 pasando como parametro:
+data=sha256(remote_seed + local_seed + auth_hash), timeout=2, params='None'
+self.key=sha256(b"lsk" + local_seed + remote_seed + auth_hash)[:16]
+ivseq = sha256(b"iv" + local_seed + remote_seed + auth_hash)
+self.iv = ivseq[:12]
+self.seq = int.from_bytes(ivseq[-4:], "big", signed=True)
+self.sig = sha256(b"ldk" + local_seed + remote_seed + auth_hash)[:28]
+// sessions._request
+payload="{'method': 'set_device_info', 'params': {'device_on': True}}"
+data=json.dumps(payload).encode("UTF-8")
+self.seq += 1
+seq = self.seq.to_bytes(4, "big", signed=True)
+# Add PKCS#7 padding
+pad_l = 16 - (len(data) % 16)
+data = data + bytes([pad_l] * pad_l)
+# Encrypt data with key
+crypto = AES.new(self.key, AES.MODE_CBC, self.iv + seq)
+ciphertext = crypto.encrypt(data)
+# Signature
+sig = sha256(self.sig + seq + ciphertext)
+encrypted= sig + ciphertext
+result = self._request_raw("request", encrypted, params={"seq": self.seq})
+Hacemos un POST a http://{ip_del_enchufe}/app/request pasando como parametro:
+data=encrypted y params = "{'seq': 823027337}"
+# Unwrap and decrypt result
+data = json.loads(self._decrypt(result).decode("UTF-8"))
+# Check error code and get result
+if data["error_code"] != 0:
+    log.error(f"Error: {data}")
+    self.key = None
+    raise Exception(f"Error code: {data['error_code']}")
+result = data.get("result")
+log.debug(f"Response: {result}")
+return result
