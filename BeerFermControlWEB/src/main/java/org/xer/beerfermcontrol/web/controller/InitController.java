@@ -84,14 +84,15 @@ public class InitController {
         return "ok";
     }
     
-    @RequestMapping(value = "/test/{ip}", method = RequestMethod.POST)
+    @RequestMapping(value = "/test/{ip}", method = RequestMethod.GET)
     @ResponseBody
     public String reading(@PathVariable("ip") String ip, HttpServletRequest request) throws Exception {
         try{
+            LOGGER.error("Entra en el controller. Vamos a testear:");
             TPLinkControlV2 tolc = new TPLinkControlV2(ip, "xerraxete@gmail.com", "ironSink45");
             return "ok";
         }catch(Exception e){
-            LOGGER.error(e);
+            LOGGER.error("Error!!!!", e);
             return "ko";
         }
     }
