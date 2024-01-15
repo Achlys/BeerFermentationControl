@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
+import org.xer.beerfermcontrol.core.util.TPLinkControlV2;
 import org.xer.beerfermcontrol.web.util.WebConstants;
 
 /**
@@ -81,6 +82,18 @@ public class InitController {
         String json = "{\"device\": \"" + deviceName + "\", \"temp\": " + temperature + ", \"sg\": " + stGravity + "}";
         beerFermControlFacade.newReading(deviceName, temperature, stGravity, json);
         return "ok";
+    }
+    
+    @RequestMapping(value = "/test/{ip}", method = RequestMethod.POST)
+    @ResponseBody
+    public String reading(@PathVariable("ip") String ip, HttpServletRequest request) throws Exception {
+        try{
+            TPLinkControlV2 tolc = new TPLinkControlV2(ip, "xerraxete@gmail.com", "ironSink45");
+            return "ok";
+        }catch(Exception e){
+            LOGGER.error(e);
+            return "ko";
+        }
     }
 
 }
