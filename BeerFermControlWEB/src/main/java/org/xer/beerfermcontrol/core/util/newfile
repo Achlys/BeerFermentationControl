@@ -31,18 +31,18 @@ self.sig = sha256(b"ldk" + local_seed + remote_seed + auth_hash)[:28]
 payload="{'method': 'set_device_info', 'params': {'device_on': True}}"
 data=json.dumps(payload).encode("UTF-8")
 self.seq += 1
-seq = self.seq.to_bytes(4, "big", signed=True)
+seqBa = self.seq.to_bytes(4, "big", signed=True)
 
 # Add PKCS#7 padding
 pad_l = 16 - (len(data) % 16)
 data = data + bytes([pad_l] * pad_l)
 
 # Encrypt data with key
-crypto = AES.new(self.key, AES.MODE_CBC, self.iv + seq)
+crypto = AES.new(self.key, AES.MODE_CBC, self.iv + seqBa)
 ciphertext = crypto.encrypt(data)
 
 # Signature
-sig = sha256(self.sig + seq + ciphertext)
+sig = sha256(self.sig + seqBa + ciphertext)
 encrypted= sig + ciphertext
 
 result = self._request_raw("request", encrypted, params={"seq": self.seq})

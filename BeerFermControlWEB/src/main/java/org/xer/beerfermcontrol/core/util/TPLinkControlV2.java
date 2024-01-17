@@ -10,10 +10,11 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
-import javax.xml.bind.DatatypeConverter;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 /**
  *
@@ -88,7 +89,7 @@ public class TPLinkControlV2 {
 
     }
 
-    public String turnOn() throws Exception {
+    public String turnOnOff(boolean on) throws Exception {
         
         // Calculamos el key
         byte[] combinacion = new byte["lsk".getBytes().length + this.localRemoteAuthHash.length];
@@ -114,50 +115,55 @@ public class TPLinkControlV2 {
         byte[] sig = Arrays.copyOfRange(mdSha256.digest(bf.array()), 0, 28);
         
         // Vamos poco a poco
-        String data = "{\"method\": \"set_device_info\", \"params\":{\"device_on\": true}}";
+        String data = "{\"method\": \"set_device_info\", \"params\":{\"device_on\": ";
+        if(on){
+            data += "true}}";
+        }else{
+            data += "false}}";
+        }
         seq += 1;
         byte[] seqBa = ByteBuffer.allocate(4).putInt(seq).array();
         
         // Add PKCS#7 padding
         int pad1 = 16 - (data.length() % 16);
-        data = data + ¿?;
-        
+        String pad1Str = Integer.toHexString(pad1);
+        byte pad1Byte = Byte.parseByte(pad1Str, 16);
+        combinacion = new byte[data.getBytes().length + pad1];
+        bf = ByteBuffer.wrap(combinacion);
+        bf.put(data.getBytes());
+        for(int i=0;i<pad1;i++){
+            bf.put(pad1Byte);
+        }
+        byte[] dataPadded = bf.array();
+                
         // Enrypt data with key
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+        Cipher aesCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        aesCipher.init(1, secretKeySpec, ivParameterSpec);
+        byte[] ciphertext = aesCipher.doFinal(dataPadded);
         
+        // Signature
+        combinacion = new byte[sig.length + seqBa.length + ciphertext.length];
+        bf = ByteBuffer.wrap(combinacion);
+        bf.put(sig);
+        bf.put(seqBa);
+        bf.put(ciphertext);
+        byte[] sigSha256 = mdSha256.digest(bf.array());
+        combinacion = new byte[sigSha256.length + ciphertext.length];
+        bf = ByteBuffer.wrap(combinacion);
+        bf.put(sigSha256);
+        bf.put(ciphertext);
+        byte[] encrypted = bf.array();
         
-        //
+        // Vamos a encender
         Response response = this.makePost(String.format("http://%s/app/request?seq=%d", this.ip, seq),
                 encrypted, this.tapoCookie);
-        return null;
+        String resultado = response.body().string();
+        LOGGER.error("Respuesta: " + response.code() + ", body: " + response.body().string());
+        return resultado;
     }
 
-    public String turnOff() throws Exception {
-        return null;
-    }
-    
-    private Response makePost(String url, String json, String cookie) throws IOException {
-        RequestBody body = RequestBody.create(JSON, json);
-        Request.Builder builder = new Request.Builder();
-        if (cookie != null) {
-            builder.addHeader("Cookie", cookie);
-        }
-        builder.url(url)
-                .post(body);
-        Request request = builder.build();
-        boolean executed = false;
-        Response response = null;
-        int i = 0;
-        while (!executed && i++ < 10) {
-            try {
-                response = okHttpClient.newCall(request).execute();
-                executed = true;
-            } catch (IOException ex) {
-                LOGGER.error("Request failed, retry...");
-            }
-        }
-        return response;
-    }
-    
     private Response makePost(String url, byte[] ba, String cookie) throws IOException {
         RequestBody body = RequestBody.create(BYTE_ARRAY, ba);
         Request.Builder builder = new Request.Builder();

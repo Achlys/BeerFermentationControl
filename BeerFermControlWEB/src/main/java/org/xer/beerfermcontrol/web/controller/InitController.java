@@ -90,6 +90,7 @@ public class InitController {
         try{
             LOGGER.error("Entra en el controller. Vamos a testear:");
             TPLinkControlV2 tolc = new TPLinkControlV2(ip, "xerraxete@gmail.com", "ironSink45");
+            tolc.turnOnOff(true);
             return "ok";
         }catch(Exception e){
             LOGGER.error("Error!!!!", e);
