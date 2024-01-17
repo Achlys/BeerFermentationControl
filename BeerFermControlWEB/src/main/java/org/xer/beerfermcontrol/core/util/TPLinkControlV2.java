@@ -138,7 +138,11 @@ public class TPLinkControlV2 {
                 
         // Enrypt data with key
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+        combinacion = new byte[iv.length + seqBa.length];
+        bf = ByteBuffer.wrap(combinacion);
+        bf.put(iv);
+        bf.put(seqBa);
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(bf.array());
         Cipher aesCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         aesCipher.init(1, secretKeySpec, ivParameterSpec);
         byte[] ciphertext = aesCipher.doFinal(dataPadded);
@@ -160,7 +164,7 @@ public class TPLinkControlV2 {
         Response response = this.makePost(String.format("http://%s/app/request?seq=%d", this.ip, seq),
                 encrypted, this.tapoCookie);
         String resultado = response.body().string();
-        LOGGER.error("Respuesta: " + response.code() + ", body: " + response.body().string());
+        LOGGER.error("Respuesta: " + response.code() + ", body: " + resultado);
         return resultado;
     }
 
