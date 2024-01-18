@@ -86,7 +86,7 @@ public class TPLinkControlV2 {
         response = this.makePost(String.format("http://%s/app/handshake2", this.ip),
                 mdSha256.digest(bf.array()), this.tapoCookie);
         LOGGER.debug("Segundo handshake: " + response.code() + ", " + response.body().string());
-
+        
     }
 
     public String turnOnOff(boolean on) throws Exception {
@@ -160,12 +160,13 @@ public class TPLinkControlV2 {
         bf.put(ciphertext);
         byte[] encrypted = bf.array();
         
-        // Vamos a encender
+        // Vamos a encender o a apagar
         Response response = this.makePost(String.format("http://%s/app/request?seq=%d", this.ip, seq),
                 encrypted, this.tapoCookie);
         String resultado = response.body().string();
         LOGGER.error("Respuesta: " + response.code() + ", body: " + resultado);
         return resultado;
+        
     }
 
     private Response makePost(String url, byte[] ba, String cookie) throws IOException {
@@ -174,8 +175,7 @@ public class TPLinkControlV2 {
         if (cookie != null) {
             builder.addHeader("Cookie", cookie);
         }
-        builder.url(url)
-                .post(body);
+        builder.url(url).post(body);
         Request request = builder.build();
         boolean executed = false;
         Response response = null;
