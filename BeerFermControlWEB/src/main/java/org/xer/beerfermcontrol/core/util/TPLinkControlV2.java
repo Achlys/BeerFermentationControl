@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -29,7 +30,6 @@ public class TPLinkControlV2 {
     private final String ip;
     private byte[] localRemoteAuthHash = null;
     private String tapoCookie;
-    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private final MediaType BYTE_ARRAY = MediaType.parse("application/octet-stream");
     private final OkHttpClient okHttpClient = new OkHttpClient();
     private final MessageDigest mdSha1 = MessageDigest.getInstance("SHA1");
@@ -39,6 +39,9 @@ public class TPLinkControlV2 {
         this.ip = ip;
         this.username = email;
         this.password = password;
+        okHttpClient.setConnectTimeout(2, TimeUnit.SECONDS);
+        okHttpClient.setReadTimeout(2, TimeUnit.SECONDS);
+        okHttpClient.setWriteTimeout(2, TimeUnit.SECONDS);
         this.makeHandShakes();
     }
     
