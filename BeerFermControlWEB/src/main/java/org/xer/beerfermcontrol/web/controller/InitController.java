@@ -1,12 +1,8 @@
 package org.xer.beerfermcontrol.web.controller;
 
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.xer.beerfermcontrol.core.bean.User;
 import org.xer.beerfermcontrol.core.facade.BeerFermControlFacade;
-import org.xer.beerfermcontrol.core.util.TPLinkControlV2;
 import org.xer.beerfermcontrol.web.util.WebConstants;
 
 /**
@@ -32,70 +27,57 @@ import org.xer.beerfermcontrol.web.util.WebConstants;
  * @author Achlys
  */
 @Controller
-@SessionAttributes({WebConstants.USER})
+@SessionAttributes({ WebConstants.USER })
 public class InitController {
 
-    private static final Logger LOGGER = LogManager.getLogger(InitController.class);
+	private static final Logger LOGGER = LogManager.getLogger(InitController.class);
 
-    @Autowired
-    private BeerFermControlFacade beerFermControlFacade;
+	@Autowired
+	private BeerFermControlFacade beerFermControlFacade;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loadLogin(Model model) {
-        if (!model.asMap().containsKey(WebConstants.USER)) {
-            model.addAttribute(WebConstants.USER, new User());
-        }
-        return "login";
-    }
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loadLogin(Model model) {
+		if (!model.asMap().containsKey(WebConstants.USER)) {
+			model.addAttribute(WebConstants.USER, new User());
+		}
+		return "login";
+	}
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@Valid @ModelAttribute(WebConstants.USER) User logUser, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "login";
-        }
-        User user = beerFermControlFacade.getUser(logUser.getUsername(), logUser.getPassword());
-        if (user == null) {
-            bindingResult.rejectValue("username", "error.login");
-            bindingResult.rejectValue("password", "error.vacio");
-            return "login";
-        } else {
-            model.addAttribute(WebConstants.USER, user);
-            return "redirect:/configList";
-        }
-    }
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(@Valid @ModelAttribute(WebConstants.USER) User logUser, BindingResult bindingResult,
+			Model model) {
+		if (bindingResult.hasErrors()) {
+			return "login";
+		}
+		User user = beerFermControlFacade.getUser(logUser.getUsername(), logUser.getPassword());
+		if (user == null) {
+			bindingResult.rejectValue("username", "error.login");
+			bindingResult.rejectValue("password", "error.vacio");
+			return "login";
+		} else {
+			model.addAttribute(WebConstants.USER, user);
+			return "redirect:/configList";
+		}
+	}
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(Model model, SessionStatus status) {
-        status.setComplete();
-        return "redirect:/login";
-    }
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(Model model, SessionStatus status) {
+		status.setComplete();
+		return "redirect:/login";
+	}
 
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String error(Model model) {
-        return "error";
-    }
+	@RequestMapping(value = "/error", method = RequestMethod.GET)
+	public String error(Model model) {
+		return "error";
+	}
 
-    @RequestMapping(value = "/newReading/{deviceName}", method = RequestMethod.POST)
-    @ResponseBody
-    public String reading(@PathVariable("deviceName") String deviceName, @RequestParam("temp") Double temperature,
-            @RequestParam("sg") Double stGravity, HttpServletRequest request) throws Exception {
-        String json = "{\"device\": \"" + deviceName + "\", \"temp\": " + temperature + ", \"sg\": " + stGravity + "}";
-        beerFermControlFacade.newReading(deviceName, temperature, stGravity, json);
-        return "ok";
-    }
-    
-    @RequestMapping(value = "/test/{ip}", method = RequestMethod.GET)
-    @ResponseBody
-    public String reading(@PathVariable("ip") String ip, HttpServletRequest request) throws Exception {
-        try{
-            LOGGER.error("Entra en el controller. Vamos a testear:");
-            TPLinkControlV2 tolc = new TPLinkControlV2(ip, "xerraxete@gmail.com", "ironSink45");
-            tolc.turnOnOff(true);
-            return "ok";
-        }catch(Exception e){
-            LOGGER.error("Error!!!!", e);
-            return "ko";
-        }
-    }
+	@RequestMapping(value = "/newReading/{deviceName}", method = RequestMethod.POST)
+	@ResponseBody
+	public String reading(@PathVariable("deviceName") String deviceName, @RequestParam("temp") Double temperature,
+			@RequestParam("sg") Double stGravity, HttpServletRequest request) throws Exception {
+		String json = "{\"device\": \"" + deviceName + "\", \"temp\": " + temperature + ", \"sg\": " + stGravity + "}";
+		beerFermControlFacade.newReading(deviceName, temperature, stGravity, json);
+		return "ok";
+	}
 
 }
